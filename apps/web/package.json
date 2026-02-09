@@ -1,27 +1,27 @@
 {
-	"name": "@bitwork/web",
-	"version": "0.1.0",
-	"type": "module",
-	"private": true,
-	"scripts": {
-		"dev": "bun run --bun next dev --port 3000",
-		"build": "bun run --bun next build",
-		"start": "bun run --bun next start",
-		"check-types": "next typegen && tsc --noEmit"
-	},
-	"dependencies": {
-		"@tailwindcss/postcss": "^4.1.18",
-		"next": "^16.1.5",
-		"postcss": "^8.5.6",
-		"react": "^19.2.0",
-		"react-dom": "^19.2.0",
-		"tailwindcss": "^4.1.18"
-	},
-	"devDependencies": {
-		"@bitwork/configs": "workspace:*",
-		"@types/node": "^25.2.2",
-		"@types/react": "^19.2.13",
-		"@types/react-dom": "^19.2.3",
-		"typescript": "^5.9.2"
-	}
+  "name": "@bitwork/web",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "bun run --bun next dev --port 3000",
+    "build": "bun run --bun next build",
+    "start": "bun run --bun next start",
+    "check-types": "next typegen && tsc --noEmit"
+  },
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.1.18",
+    "next": "^16.1.5",
+    "postcss": "^8.5.6",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tailwindcss": "^4.1.18"
+  },
+  "devDependencies": {
+    "@bitwork/configs": "workspace:*",
+    "@types/node": "^25.2.2",
+    "@types/react": "^19.2.13",
+    "@types/react-dom": "^19.2.3",
+    "typescript": "^5.9.2"
+  }
 }
