@@ -6,13 +6,22 @@ import {
   DialogContent,
   DialogTitle,
 } from "@bitwork/ui/components/dialog";
-import { Briefcase, RefreshCw, ShieldCheck, Users, XIcon } from "lucide-react";
+import {
+  Briefcase,
+  Check,
+  RefreshCw,
+  ShieldCheck,
+  Users,
+  XIcon,
+} from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { AuthForm } from "./auth-form";
 
 export function OnboardingModal() {
-  const [activeTab, setActiveTab] = useState<"about" | "signup">("about");
+  const [activeTab, setActiveTab] = useState<"about" | "signup" | "complete">(
+    "about"
+  );
 
   return (
     <Dialog defaultOpen>
@@ -64,6 +73,26 @@ export function OnboardingModal() {
                 }`}
               />
             </button>
+            <button
+              className="group flex flex-col outline-none"
+              onClick={() => setActiveTab("complete")}
+              type="button"
+            >
+              <span
+                className={`pb-1 font-semibold text-sm transition-colors ${
+                  activeTab === "complete"
+                    ? "text-gray-900"
+                    : "text-gray-400 group-hover:text-gray-600"
+                }`}
+              >
+                Complete
+              </span>
+              <div
+                className={`h-0.5 w-full rounded-full transition-colors ${
+                  activeTab === "complete" ? "bg-black" : "bg-transparent"
+                }`}
+              />
+            </button>
           </div>
           <button
             aria-label="Close"
@@ -74,9 +103,9 @@ export function OnboardingModal() {
           </button>
         </div>
 
-        {activeTab === "about" ? (
+        {activeTab === "about" && (
           <div className="flex flex-1 flex-col overflow-hidden md:flex-row">
-            <div className="relative hidden w-full items-center justify-center bg-gray-100 p-1.5 md:flex md:w-1/2">
+            <div className="relative hidden w-full items-center justify-center bg-white p-1.5 md:flex md:w-1/2">
               <div className="relative h-full w-full overflow-hidden rounded-xl">
                 <Image
                   alt="Skill Exchange Intro"
@@ -87,7 +116,7 @@ export function OnboardingModal() {
                 />
               </div>
             </div>
-            <div className="relative flex h-64 w-full items-center justify-center bg-gray-100 p-1.5 md:hidden">
+            <div className="relative flex h-64 w-full items-center justify-center bg-white p-1.5 md:hidden">
               <div className="relative h-full w-full overflow-hidden rounded-xl">
                 <Image
                   alt="Skill Exchange Intro"
@@ -198,9 +227,59 @@ export function OnboardingModal() {
               </div>
             </div>
           </div>
-        ) : (
+        )}
+
+        {activeTab === "signup" && (
           <div className="flex flex-1 items-center justify-center overflow-y-auto">
             <AuthForm />
+          </div>
+        )}
+
+        {activeTab === "complete" && (
+          <div className="flex flex-1 flex-col overflow-hidden">
+            <div className="relative h-100 w-full shrink-0 bg-white p-1.5">
+              <div className="relative h-full w-full overflow-hidden rounded-xl">
+                <Image
+                  alt="Onboarding Complete"
+                  className="object-cover"
+                  fill
+                  priority
+                  src="/onboarding-complete.png"
+                />
+              </div>
+            </div>
+            <div className="flex flex-1 flex-col items-center justify-center bg-white pb-8 md:pb-12">
+              <div className="w-full max-w-lg space-y-8 text-center">
+                <div className="space-y-3">
+                  <h2 className="font-bold text-2xl text-gray-900 md:text-3xl">
+                    You are all set!
+                  </h2>
+                  <p className="text-gray-500">
+                    We have created your account, you can now start exchanging
+                    skills with ease!
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-center gap-8 font-medium text-gray-500 text-sm">
+                  <div className="flex items-center gap-2">
+                    <Check className="h-4 w-4" />
+                    <span>Profile verified</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Check className="h-4 w-4" />
+                    <span>Skills listed</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Check className="h-4 w-4" />
+                    <span>Ready to work</span>
+                  </div>
+                </div>
+
+                <Button className="h-12 w-full rounded-xl bg-gray-100 font-semibold text-base text-gray-900 hover:bg-gray-100">
+                  Continue
+                </Button>
+              </div>
+            </div>
           </div>
         )}
       </DialogContent>

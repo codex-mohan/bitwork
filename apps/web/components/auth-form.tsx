@@ -11,7 +11,7 @@ export function AuthForm() {
   return (
     <div className="flex w-full flex-1 flex-col items-center justify-center p-6 md:p-10">
       <div className="w-full max-w-md space-y-8">
-        <div className="flex flex-col items-center space-y-2 text-center">
+        <div className="flex flex-col items-start space-y-2 text-left">
           <h2 className="font-bold text-2xl text-gray-900">
             Create your Bitwork account
           </h2>
