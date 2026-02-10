@@ -11,8 +11,7 @@
     "push": "drizzle-kit push",
     "generate": "drizzle-kit generate",
     "migrate": "drizzle-kit migrate",
-    "studio": "drizzle-kit studio",
-    "check": "ultracite fix --unsafe"
+    "studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@t3-oss/env-core": "^0.12.0",
