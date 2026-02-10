@@ -11,8 +11,11 @@
   },
   "dependencies": {
     "@bitwork/ui": "workspace:*",
+    "@fontsource/instrument-sans": "^5.2.8",
+    "@fontsource/inter": "^5.2.8",
     "@tailwindcss/postcss": "^4.1.18",
     "drizzle-orm": "^0.45.1",
+    "lucide-react": "^0.563.0",
     "next": "^16.1.5",
     "postcss": "^8.5.6",
     "react": "^19.2.0",
