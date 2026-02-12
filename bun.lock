@@ -30,6 +30,7 @@
         "@fontsource/inter": "^5.2.8",
         "@tailwindcss/postcss": "^4.1.18",
         "drizzle-orm": "^0.45.1",
+        "lenis": "^1.3.17",
         "lucide-react": "^0.563.0",
         "next": "^16.1.6",
         "postcss": "^8.5.6",
@@ -576,6 +577,8 @@
     "lefthook-windows-arm64": ["lefthook-windows-arm64@2.1.0", "", { "os": "win32", "cpu": "arm64" }, "sha512-0WN+grrxt9zP9NGRcztoPXcz25tteem91rfLWgQFab+50csJ47zldlsB7/eOS/eHG5mUg5g5NPR4XefnXtjOcQ=="],
 
     "lefthook-windows-x64": ["lefthook-windows-x64@2.1.0", "", { "os": "win32", "cpu": "x64" }, "sha512-XbO/5nAZQLpUn0tPpgCYfFBFJHnymSglQ73jD6wymNrR1j8I5EcXGlP6YcLhnZ83yzsdLC+gup+N6IqUeiyRdw=="],
+
+    "lenis": ["lenis@1.3.17", "", { "peerDependencies": { "@nuxt/kit": ">=3.0.0", "react": ">=17.0.0", "vue": ">=3.0.0" }, "optionalPeers": ["@nuxt/kit", "react", "vue"] }, "sha512-k9T9rgcxne49ggJOvXCraWn5dt7u2mO+BNkhyu6yxuEnm9c092kAW5Bus5SO211zUvx7aCCEtzy9UWr0RB+oJw=="],
 
     "lightningcss": ["lightningcss@1.30.2", "", { "dependencies": { "detect-libc": "^2.0.3" }, "optionalDependencies": { "lightningcss-android-arm64": "1.30.2", "lightningcss-darwin-arm64": "1.30.2", "lightningcss-darwin-x64": "1.30.2", "lightningcss-freebsd-x64": "1.30.2", "lightningcss-linux-arm-gnueabihf": "1.30.2", "lightningcss-linux-arm64-gnu": "1.30.2", "lightningcss-linux-arm64-musl": "1.30.2", "lightningcss-linux-x64-gnu": "1.30.2", "lightningcss-linux-x64-musl": "1.30.2", "lightningcss-win32-arm64-msvc": "1.30.2", "lightningcss-win32-x64-msvc": "1.30.2" } }, "sha512-utfs7Pr5uJyyvDETitgsaqSyjCb2qNRAtuqUeWIAKztsOYdcACf2KtARYXg2pSvhkt+9NfoaNY7fxjl6nuMjIQ=="],
 
