@@ -6,22 +6,33 @@ import {
 } from "@bitwork/ui/components/input-group";
 import { Label } from "@bitwork/ui/components/label";
 import { Lock, Mail } from "lucide-react";
+import Image from "next/image";
 
 export function AuthForm() {
   return (
     <div className="flex w-full flex-1 flex-col items-center justify-center p-6 md:p-10">
       <div className="w-full max-w-md space-y-8">
-        <div className="flex flex-col items-start space-y-2 text-left">
-          <h2 className="font-bold text-2xl text-gray-900">
-            Create your Bitwork account
-          </h2>
-          <p className="text-base text-gray-500">
-            Sign up to join the network and access all features.
-          </p>
+        <div className="flex flex-col items-start space-y-4 text-left">
+          <Image
+            alt="Bitwork"
+            className="h-8 w-8"
+            height={32}
+            priority
+            src="/bitwork.svg"
+            width={32}
+          />
+          <div className="space-y-2">
+            <h2 className="font-serif text-2xl text-foreground">
+              Create your Bitwork account
+            </h2>
+            <p className="text-muted-foreground text-sm">
+              Sign up to join the network and access all features.
+            </p>
+          </div>
         </div>
 
         <Button
-          className="h-12 w-full gap-3 rounded-xl border-gray-200 font-medium text-base"
+          className="h-12 w-full gap-3 rounded-full border-border font-medium text-base"
           variant="outline"
         >
           <svg className="h-8 w-8" viewBox="0 0 24 24">
@@ -48,21 +59,26 @@ export function AuthForm() {
 
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-gray-200 border-t" />
+            <span className="w-full border-border border-t" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-white px-2 text-gray-500">OR</span>
+            <span className="bg-background px-2 font-mono text-muted-foreground">
+              OR
+            </span>
           </div>
         </div>
 
         <div className="grid gap-5">
           <div className="grid gap-2">
-            <Label className="font-medium text-sm" htmlFor="email">
+            <Label
+              className="font-medium text-foreground text-sm"
+              htmlFor="email"
+            >
               Email
             </Label>
-            <InputGroup className="h-12 rounded-xl border-gray-200">
+            <InputGroup className="h-12 rounded-xl border-border">
               <InputGroupAddon>
-                <Mail className="size-4 text-gray-400" />
+                <Mail className="size-4 text-muted-foreground" />
               </InputGroupAddon>
               <InputGroupInput
                 autoCapitalize="none"
@@ -76,10 +92,12 @@ export function AuthForm() {
             </InputGroup>
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="password">Password</Label>
-            <InputGroup className="h-12 rounded-xl border-gray-200">
+            <Label className="text-foreground" htmlFor="password">
+              Password
+            </Label>
+            <InputGroup className="h-12 rounded-xl border-border">
               <InputGroupAddon>
-                <Lock className="size-4 text-gray-400" />
+                <Lock className="size-4 text-muted-foreground" />
               </InputGroupAddon>
               <InputGroupInput
                 className="h-full text-base"
@@ -90,10 +108,12 @@ export function AuthForm() {
             </InputGroup>
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="confirm-password">Confirm password</Label>
-            <InputGroup className="h-12 rounded-xl border-gray-200">
+            <Label className="text-foreground" htmlFor="confirm-password">
+              Confirm password
+            </Label>
+            <InputGroup className="h-12 rounded-xl border-border">
               <InputGroupAddon>
-                <Lock className="size-4 text-gray-400" />
+                <Lock className="size-4 text-muted-foreground" />
               </InputGroupAddon>
               <InputGroupInput
                 className="h-full text-base"
@@ -103,7 +123,7 @@ export function AuthForm() {
               />
             </InputGroup>
           </div>
-          <Button className="mt-2 h-12 w-full rounded-xl bg-gray-900 font-semibold text-base text-white shadow-gray-200 shadow-lg hover:bg-gray-800">
+          <Button className="mt-2 h-12 w-full rounded-full bg-primary font-medium text-base text-primary-foreground hover:bg-primary/90">
             Create account
           </Button>
         </div>
