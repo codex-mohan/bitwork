@@ -27,12 +27,10 @@ const JobCard: React.FC<JobProps> = ({
 
   return (
     <div className="w-full max-w-md overflow-hidden rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm transition-all hover:border-zinc-400 hover:shadow-md">
-      {/* Header: User Avatar + Request Info */}
       <div className="flex items-start gap-4">
         <div className="h-12 w-12 shrink-0 overflow-hidden rounded-full border border-zinc-200 bg-zinc-100">
           <div className="relative h-12 w-12">
             {" "}
-            {/* Container needs relative or absolute */}
             <Image
               alt={requesterName}
               className="object-cover"
@@ -49,7 +47,6 @@ const JobCard: React.FC<JobProps> = ({
         </div>
       </div>
 
-      {/* Stats/Tags: Budget & Location */}
       <div className="mt-6 flex flex-wrap gap-2">
         <div className="flex items-center gap-1.5 rounded-md bg-zinc-100 px-2.5 py-1 font-bold text-xs text-zinc-800">
           <IndianRupee className="text-zinc-600" size={14} />
@@ -61,12 +58,10 @@ const JobCard: React.FC<JobProps> = ({
         </div>
       </div>
 
-      {/* Description */}
       <p className="mt-4 line-clamp-3 h-15 text-sm text-zinc-600 leading-relaxed">
         {description}
       </p>
 
-      {/* Actions */}
       <div className="mt-8 flex items-center justify-between">
         <button
           className={`flex items-center gap-2 rounded-lg border px-4 py-2 font-bold text-sm transition-all ${

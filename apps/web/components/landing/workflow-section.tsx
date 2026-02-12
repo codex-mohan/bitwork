@@ -32,7 +32,7 @@ export function WorkflowSection() {
         <div className="mb-16 flex items-start justify-between">
           <div>
             <span className="font-mono text-muted-foreground text-xs tracking-wider">
-              ◆ TASK_WORKFLOW
+              TASK WORKFLOW
             </span>
             <h2 className="mt-4 max-w-md font-serif text-4xl leading-tight md:text-5xl">
               From task to done in four steps.

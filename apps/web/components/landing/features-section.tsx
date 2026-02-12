@@ -16,7 +16,7 @@ export function FeaturesSection() {
         <div className="mb-16 flex items-start justify-between">
           <div>
             <span className="font-mono text-muted-foreground text-xs tracking-wider">
-              ◆ PLATFORM_FEATURES
+              PLATFORM FEATURES
             </span>
             <h2 className="mt-4 max-w-lg font-serif text-4xl leading-tight md:text-5xl">
               Why communities choose Bitwork

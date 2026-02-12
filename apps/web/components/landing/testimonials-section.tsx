@@ -43,7 +43,7 @@ export function TestimonialsSection() {
         <div className="mb-16 flex items-start justify-between">
           <div>
             <span className="font-mono text-muted-foreground text-xs tracking-wider">
-              ◆ COMMUNITY_STORIES
+              COMMUNITY STORIES
             </span>
             <h2 className="mt-4 max-w-md font-serif text-4xl leading-tight md:text-5xl">
               People building local economies
