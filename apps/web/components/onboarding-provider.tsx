@@ -4,6 +4,7 @@ import { createContext, type ReactNode, useContext, useState } from "react";
 import { OnboardingModal } from "./onboarding-modal";
 
 interface OnboardingContextType {
+  isOpen: boolean;
   openOnboarding: () => void;
   closeOnboarding: () => void;
 }
@@ -25,7 +26,9 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
   const closeOnboarding = () => setIsOpen(false);
 
   return (
-    <OnboardingContext.Provider value={{ openOnboarding, closeOnboarding }}>
+    <OnboardingContext.Provider
+      value={{ isOpen, openOnboarding, closeOnboarding }}
+    >
       {children}
       {isOpen && <OnboardingModal />}
     </OnboardingContext.Provider>

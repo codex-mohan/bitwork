@@ -20,13 +20,13 @@ import { AuthForm } from "./auth-form";
 import { useOnboarding } from "./onboarding-provider";
 
 export function OnboardingModal() {
-  const { closeOnboarding } = useOnboarding();
+  const { isOpen, closeOnboarding } = useOnboarding();
   const [activeTab, setActiveTab] = useState<"about" | "signup" | "complete">(
     "about"
   );
 
   return (
-    <Dialog defaultOpen>
+    <Dialog onOpenChange={(open) => !open && closeOnboarding()} open={isOpen}>
       <DialogContent
         className="flex h-200 max-h-[90vh] w-full max-w-5xl flex-col gap-0 overflow-hidden rounded-2xl bg-background p-0 sm:max-w-5xl"
         showCloseButton={false}
