@@ -5,8 +5,9 @@ import { OnboardingModal } from "./onboarding-modal";
 
 interface OnboardingContextType {
   isOpen: boolean;
-  openOnboarding: () => void;
+  openOnboarding: (mode?: "signup" | "signin") => void;
   closeOnboarding: () => void;
+  initialMode: "signup" | "signin";
 }
 
 const OnboardingContext = createContext<OnboardingContextType | null>(null);
@@ -21,16 +22,21 @@ export function useOnboarding() {
 
 export function OnboardingProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [initialMode, setInitialMode] = useState<"signup" | "signin">("signup");
 
-  const openOnboarding = () => setIsOpen(true);
+  const openOnboarding = (mode: "signup" | "signin" = "signup") => {
+    setInitialMode(mode);
+    setIsOpen(true);
+  };
+
   const closeOnboarding = () => setIsOpen(false);
 
   return (
     <OnboardingContext.Provider
-      value={{ isOpen, openOnboarding, closeOnboarding }}
+      value={{ isOpen, openOnboarding, closeOnboarding, initialMode }}
     >
       {children}
-      {isOpen && <OnboardingModal />}
+      {isOpen && <OnboardingModal initialMode={initialMode} />}
     </OnboardingContext.Provider>
   );
 }

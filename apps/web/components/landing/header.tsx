@@ -52,8 +52,15 @@ export function Header() {
 
         <div className="flex items-center gap-3">
           <button
+            className="hidden rounded-full px-4 py-2 font-medium text-sm transition-all duration-300 hover:bg-secondary sm:block"
+            onClick={() => openOnboarding("signin")}
+            type="button"
+          >
+            Sign In
+          </button>
+          <button
             className="rounded-full bg-primary px-4 py-2 font-medium text-primary-foreground text-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/20 active:translate-y-0"
-            onClick={openOnboarding}
+            onClick={() => openOnboarding("signup")}
             type="button"
           >
             Join Now

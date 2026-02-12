@@ -32,7 +32,7 @@ export function HeroSection() {
 
             <button
               className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-medium text-primary-foreground text-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/20 active:translate-y-0"
-              onClick={openOnboarding}
+              onClick={() => openOnboarding("signup")}
               type="button"
             >
               Get Started

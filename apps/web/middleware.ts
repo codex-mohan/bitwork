@@ -11,8 +11,13 @@ export async function middleware(request: NextRequest) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
+  // Return early if environment variables are not configured
+  // This prevents MIDDLEWARE_INVOCATION_FAILED errors in deployment
   if (!(supabaseUrl && supabaseKey)) {
-    throw new Error("Supabase URL and Key must be defined");
+    console.warn(
+      "Supabase URL and Key are not configured - skipping auth middleware"
+    );
+    return response;
   }
 
   const supabase = createServerClient(supabaseUrl, supabaseKey, {

@@ -383,6 +383,37 @@ bitwork (root)
 
 ---
 
+## 📚 Dashboard System
+
+Bitwork features a comprehensive, role-based dashboard system that provides distinct experiences for Service Seekers and Skill Providers.
+
+### Dashboard Features
+
+- **Adaptive Interface**: Automatically adjusts based on user role (seeker/provider)
+- **Real-time Notifications**: Live updates on applications, messages, and job activity
+- **Smart Job Matching**: Visual indicators for job compatibility
+- **Quick Actions**: Streamlined workflows for common tasks
+- **Analytics**: Performance insights for providers
+- **Responsive Design**: Optimized for desktop, tablet, and mobile
+
+### Documentation
+
+Comprehensive documentation is available in the `/docs` directory:
+
+- **[Dashboard Overview](docs/README.md)** - Complete documentation index
+- **[Architecture](docs/architecture/OVERVIEW.md)** - System architecture and patterns
+- **[Database Schema](docs/architecture/DATABASE.md)** - Database structure and queries
+- **[Component Guide](docs/architecture/COMPONENT-ARCHITECTURE.md)** - Component patterns
+- **[Feature Documentation](docs/features/)** - Detailed feature guides
+
+### Quick Links for Developers
+
+- [Setup Guide](docs/guides/SETUP.md) - Local development setup
+- [Contributing Guide](docs/guides/CONTRIBUTING.md) - How to contribute
+- [API Reference](docs/api/SERVER-ACTIONS.md) - Server actions documentation
+
+---
+
 ## 🚧 Roadmap
 
 - [ ] User authentication with OAuth providers

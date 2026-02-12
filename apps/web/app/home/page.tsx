@@ -1,11 +1,82 @@
-import ApplicationHomePage from "@/components/application-home-page";
+import { db, profiles } from "@bitwork/db";
+import { createServerClient } from "@supabase/ssr";
+import { eq } from "drizzle-orm";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { DashboardLayout } from "@/components/dashboard/layout";
+import { ProviderDashboard } from "@/components/dashboard/provider-dashboard";
+import { SeekerDashboard } from "@/components/dashboard/seeker-dashboard";
 
-export function page() {
-  return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-50 p-4">
-      <ApplicationHomePage />
-    </main>
-  );
+export const metadata = {
+  title: "Dashboard | Bitwork",
+  description: "Your Bitwork dashboard",
+};
+
+async function getUser() {
+  const cookieStore = await cookies();
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!(supabaseUrl && supabaseKey)) {
+    throw new Error("Supabase credentials not configured");
+  }
+
+  const supabase = createServerClient(supabaseUrl, supabaseKey, {
+    cookies: {
+      getAll() {
+        return cookieStore.getAll();
+      },
+      setAll() {
+        // Not needed for server components
+      },
+    },
+  });
+
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+
+  if (error || !user) {
+    return null;
+  }
+
+  return user;
 }
 
-export default page;
+async function getProfile(userId: string) {
+  const [profile] = await db
+    .select()
+    .from(profiles)
+    .where(eq(profiles.id, userId));
+
+  return profile;
+}
+
+export default async function DashboardPage() {
+  const user = await getUser();
+
+  if (!user) {
+    redirect("/");
+  }
+
+  const profile = await getProfile(user.id);
+
+  const userData = {
+    id: user.id,
+    email: user.email,
+    fullName: profile?.fullName,
+    avatarUrl: profile?.avatarUrl,
+    role: profile?.role,
+  };
+
+  return (
+    <DashboardLayout user={userData}>
+      {profile?.role === "provider" ? (
+        <ProviderDashboard userId={user.id} />
+      ) : (
+        <SeekerDashboard userId={user.id} />
+      )}
+    </DashboardLayout>
+  );
+}

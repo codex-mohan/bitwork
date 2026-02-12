@@ -9,7 +9,7 @@ export function Footer() {
         <div className="mb-10 flex flex-col items-center gap-4 sm:mb-16 sm:flex-row sm:justify-between">
           <Link
             className="font-mono text-muted-foreground text-xs uppercase tracking-widest transition-colors hover:text-foreground"
-            href="#about"
+            href="/about"
           >
             About
           </Link>
@@ -20,7 +20,7 @@ export function Footer() {
 
           <Link
             className="font-mono text-muted-foreground text-xs uppercase tracking-widest transition-colors hover:text-foreground"
-            href="#contact"
+            href="/contact"
           >
             Contact
           </Link>

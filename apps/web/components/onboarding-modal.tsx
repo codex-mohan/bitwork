@@ -19,10 +19,16 @@ import { useState } from "react";
 import { AuthForm } from "./auth-form";
 import { useOnboarding } from "./onboarding-provider";
 
-export function OnboardingModal() {
+interface OnboardingModalProps {
+  initialMode?: "signup" | "signin";
+}
+
+export function OnboardingModal({
+  initialMode = "signup",
+}: OnboardingModalProps) {
   const { isOpen, closeOnboarding } = useOnboarding();
   const [activeTab, setActiveTab] = useState<"about" | "signup" | "complete">(
-    "about"
+    initialMode === "signin" ? "signup" : "about"
   );
 
   return (
@@ -69,7 +75,7 @@ export function OnboardingModal() {
                     : "text-muted-foreground group-hover:text-foreground"
                 }`}
               >
-                Sign up
+                {initialMode === "signin" ? "Sign In" : "Sign Up"}
               </span>
               <div
                 className={`mt-1 h-0.5 w-full rounded-full transition-all duration-300 ${
@@ -201,9 +207,10 @@ export function OnboardingModal() {
                     </Button>
                     <Button
                       className="h-9 w-full rounded-full font-medium text-muted-foreground text-sm hover:bg-secondary sm:h-10"
+                      onClick={() => setActiveTab("signup")}
                       variant="ghost"
                     >
-                      Explore first
+                      Already have an account? Sign In
                     </Button>
                   </div>
 
@@ -219,7 +226,7 @@ export function OnboardingModal() {
 
         {activeTab === "signup" && (
           <div className="flex flex-1 animate-[fadeInUp_0.5s_ease-out_both] items-center justify-center overflow-y-auto bg-background">
-            <AuthForm />
+            <AuthForm initialMode={initialMode} />
           </div>
         )}
 
