@@ -1,31 +1,39 @@
 <div align="center">
 
-![Bitwork](https://capsule-render.vercel.app/api?type=waving&color=7aa2f7&height=200&section=header&text=bitwork&fontSize=80&fontAlignY=35&desc=A%20modern%20job%20board%20platform%20built%20with%20Next.js&descAlignY=55&descSize=20&fontColor=1a1b26)
+<p align="center">
+  <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" width="80" height="80">
+    <path fill="#2563eb" d="M30 28V12C30 10.8954 29.1046 10 28 10H27.8994C27.369 10 26.8604 10.2109 26.4854 10.5859L10.5859 26.4854C10.2109 26.8604 10 27.369 10 27.8994V40H0V27.8994C2.15312e-05 24.7168 1.26423 21.6645 3.51465 19.4141L19.4141 3.51465C21.6645 1.26423 24.7168 2.1373e-05 27.8994 0H28C34.6274 0 40 5.37258 40 12V28C40 34.6274 34.6274 40 28 40H14V30H28C29.1046 30 30 29.1046 30 28Z M0 0H17L7 10H0V0Z"></path>
+  </svg>
+</p>
+
+<h1><b>bitwork</b></h1>
+
+<p>A modern job board platform built with Next.js & Turborepo</p>
 
 <p>
   <a href="https://github.com/codex-mohan/bitwork/stargazers">
-    <img src="https://img.shields.io/github/stars/codex-mohan/bitwork?color=f7768e&label=STARS&style=for-the-badge&labelColor=1a1b26&logo=github&logoColor=f7768e" alt="Stars">
+    <img src="https://img.shields.io/github/stars/codex-mohan/bitwork?color=2563eb&label=STARS&style=for-the-badge&labelColor=0f172a&logo=github&logoColor=2563eb" alt="Stars">
   </a>
   <a href="https://github.com/codex-mohan/bitwork/network/members">
-    <img src="https://img.shields.io/github/forks/codex-mohan/bitwork?color=9ece6a&label=FORKS&style=for-the-badge&labelColor=1a1b26&logo=github&logoColor=9ece6a" alt="Forks">
+    <img src="https://img.shields.io/github/forks/codex-mohan/bitwork?color=3b82f6&label=FORKS&style=for-the-badge&labelColor=0f172a&logo=github&logoColor=3b82f6" alt="Forks">
   </a>
   <a href="https://github.com/codex-mohan/bitwork/issues">
-    <img src="https://img.shields.io/github/issues/codex-mohan/bitwork?color=e0af68&label=ISSUES&style=for-the-badge&labelColor=1a1b26&logo=github&logoColor=e0af68" alt="Issues">
+    <img src="https://img.shields.io/github/issues/codex-mohan/bitwork?color=60a5fa&label=ISSUES&style=for-the-badge&labelColor=0f172a&logo=github&logoColor=60a5fa" alt="Issues">
   </a>
 </p>
 
 <p>
-  <img src="https://img.shields.io/badge/NEXT.JS-16.1-7aa2f7?style=for-the-badge&logo=next.js&logoColor=white&labelColor=1a1b26" alt="Next.js">
-  <img src="https://img.shields.io/badge/REACT-19-61DAFB?style=for-the-badge&logo=react&logoColor=white&labelColor=1a1b26" alt="React">
-  <img src="https://img.shields.io/badge/TYPESCRIPT-5.9-3178C6?style=for-the-badge&logo=typescript&logoColor=white&labelColor=1a1b26" alt="TypeScript">
-  <img src="https://img.shields.io/badge/TAILWIND-v4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white&labelColor=1a1b26" alt="Tailwind CSS">
-  <img src="https://img.shields.io/badge/BUN-1.3-f472b6?style=for-the-badge&logo=bun&logoColor=white&labelColor=1a1b26" alt="Bun">
+  <img src="https://img.shields.io/badge/NEXT.JS-16.1-2563eb?style=for-the-badge&logo=next.js&logoColor=white&labelColor=0f172a" alt="Next.js">
+  <img src="https://img.shields.io/badge/REACT-19-3b82f6?style=for-the-badge&logo=react&logoColor=white&labelColor=0f172a" alt="React">
+  <img src="https://img.shields.io/badge/TYPESCRIPT-5.9-2563eb?style=for-the-badge&logo=typescript&logoColor=white&labelColor=0f172a" alt="TypeScript">
+  <img src="https://img.shields.io/badge/TAILWIND-v4-3b82f6?style=for-the-badge&logo=tailwindcss&logoColor=white&labelColor=0f172a" alt="Tailwind CSS">
+  <img src="https://img.shields.io/badge/BUN-1.3-60a5fa?style=for-the-badge&logo=bun&logoColor=white&labelColor=0f172a" alt="Bun">
 </p>
 
 <p>
-  <img src="https://img.shields.io/badge/DRIZZLE-ORM-C5F015?style=for-the-badge&logo=drizzle&logoColor=white&labelColor=1a1b26" alt="Drizzle ORM">
-  <img src="https://img.shields.io/badge/TURBOREPO-2.8-7B68EE?style=for-the-badge&logo=turborepo&logoColor=white&labelColor=1a1b26" alt="Turborepo">
-  <img src="https://img.shields.io/badge/BIOME-2.3-60A5FA?style=for-the-badge&logo=biome&logoColor=white&labelColor=1a1b26" alt="Biome">
+  <img src="https://img.shields.io/badge/DRIZZLE-ORM-2563eb?style=for-the-badge&logo=drizzle&logoColor=white&labelColor=0f172a" alt="Drizzle ORM">
+  <img src="https://img.shields.io/badge/TURBOREPO-2.8-3b82f6?style=for-the-badge&logo=turborepo&logoColor=white&labelColor=0f172a" alt="Turborepo">
+  <img src="https://img.shields.io/badge/BIOME-2.3-2563eb?style=for-the-badge&logo=biome&logoColor=white&labelColor=0f172a" alt="Biome">
 </p>
 
 </div>
@@ -80,11 +88,11 @@ bitwork/
 
 | Category | Technologies |
 |----------|-------------|
-| **Framework** | ![Next.js](https://img.shields.io/badge/Next.js-16.1-7aa2f7?style=flat-square&logo=next.js&logoColor=white&labelColor=1a1b26) |
-| **UI Library** | ![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=white&labelColor=1a1b26) |
-| **Language** | ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat-square&logo=typescript&logoColor=white&labelColor=1a1b26) |
-| **Styling** | ![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white&labelColor=1a1b26) |
-| **Runtime** | ![Bun](https://img.shields.io/badge/Bun-1.3-f472b6?style=flat-square&logo=bun&logoColor=white&labelColor=1a1b26) |
+| **Framework** | ![Next.js](https://img.shields.io/badge/Next.js-16.1-2563eb?style=flat-square&logo=next.js&logoColor=white&labelColor=0f172a) |
+| **UI Library** | ![React](https://img.shields.io/badge/React-19-3b82f6?style=flat-square&logo=react&logoColor=white&labelColor=0f172a) |
+| **Language** | ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-2563eb?style=flat-square&logo=typescript&logoColor=white&labelColor=0f172a) |
+| **Styling** | ![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-3b82f6?style=flat-square&logo=tailwindcss&logoColor=white&labelColor=0f172a) |
+| **Runtime** | ![Bun](https://img.shields.io/badge/Bun-1.3-60a5fa?style=flat-square&logo=bun&logoColor=white&labelColor=0f172a) |
 
 ### Monorepo & Tooling
 
@@ -430,10 +438,10 @@ Project Link: [https://github.com/yourusername/bitwork](https://github.com/youru
 <div align="center">
 
 <p>
-  <img src="https://img.shields.io/badge/MADE%20WITH-♡-f7768e?style=for-the-badge&labelColor=1a1b26" alt="Made with love">
+  <img src="https://img.shields.io/badge/MADE%20WITH-♡-2563eb?style=for-the-badge&labelColor=0f172a" alt="Made with love">
 </p>
 
-<p><i>Built with the Tokyo Night color palette 🌃</i></p>
+<p><i>Built with modern technologies and best practices 💙</i></p>
 
 <p>If you found this project helpful, please consider giving it a ⭐</p>
 
