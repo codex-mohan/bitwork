@@ -127,10 +127,8 @@ export function DashboardLayout({ children, user }: DashboardLayoutProps) {
         <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-border border-b bg-card/80 px-4 backdrop-blur-sm lg:px-8">
           <div className="flex items-center gap-4 lg:hidden">
             <Sheet>
-              <SheetTrigger>
-                <Button size="icon" variant="ghost">
-                  <Menu className="h-5 w-5" />
-                </Button>
+              <SheetTrigger render={<Button size="icon" variant="ghost" />}>
+                <Menu className="h-5 w-5" />
               </SheetTrigger>
               <SheetContent className="w-64 p-0" side="left">
                 <div className="flex h-full flex-col">
@@ -193,18 +191,20 @@ export function DashboardLayout({ children, user }: DashboardLayoutProps) {
             </Button>
 
             <DropdownMenu>
-              <DropdownMenuTrigger>
-                <Button
-                  className="relative h-9 w-9 rounded-full"
-                  variant="ghost"
-                >
-                  <Avatar className="h-9 w-9">
-                    <AvatarImage src={user.avatarUrl ?? undefined} />
-                    <AvatarFallback className="bg-primary text-primary-foreground text-sm">
-                      {user.fullName?.charAt(0) ?? user.email?.charAt(0) ?? "U"}
-                    </AvatarFallback>
-                  </Avatar>
-                </Button>
+              <DropdownMenuTrigger
+                render={
+                  <Button
+                    className="relative h-9 w-9 rounded-full"
+                    variant="ghost"
+                  />
+                }
+              >
+                <Avatar className="h-9 w-9">
+                  <AvatarImage src={user.avatarUrl ?? undefined} />
+                  <AvatarFallback className="bg-primary text-primary-foreground text-sm">
+                    {user.fullName?.charAt(0) ?? user.email?.charAt(0) ?? "U"}
+                  </AvatarFallback>
+                </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
                 <div className="flex items-center gap-2 p-2">

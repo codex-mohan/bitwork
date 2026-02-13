@@ -62,26 +62,26 @@ async function DashboardContent({ userId }: ProviderDashboardProps) {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatsCard
           color="primary"
-          icon={Briefcase}
+          icon={<Briefcase className="h-6 w-6" />}
           title="Active Jobs"
           value={stats.activeJobs}
         />
         <StatsCard
           color="info"
-          icon={Users}
+          icon={<Users className="h-6 w-6" />}
           title="Total Applications"
           trend={{ value: "+12%", direction: "up" }}
           value={stats.totalApplications}
         />
         <StatsCard
           color="warning"
-          icon={Clock}
+          icon={<Clock className="h-6 w-6" />}
           title="Pending Review"
           value={stats.pendingApplications}
         />
         <StatsCard
           color="success"
-          icon={Eye}
+          icon={<Eye className="h-6 w-6" />}
           title="Total Views"
           value={stats.totalViews.toLocaleString()}
         />

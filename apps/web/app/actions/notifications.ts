@@ -3,7 +3,7 @@
 import { db, type Notification, notifications } from "@bitwork/db";
 import { and, count, desc, eq } from "drizzle-orm";
 
-export function getNotifications(
+export async function getNotifications(
   userId: string,
   limit = 20,
   onlyUnread = false
@@ -14,7 +14,7 @@ export function getNotifications(
     whereConditions.push(eq(notifications.isRead, false));
   }
 
-  return db
+  return await db
     .select()
     .from(notifications)
     .where(and(...whereConditions))

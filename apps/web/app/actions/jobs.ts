@@ -1,15 +1,121 @@
 "use server";
 
-import {
-  applications,
-  db,
-  type Job,
-  jobs,
-  profiles,
-  savedJobs,
-} from "@bitwork/db";
-import { and, count, desc, eq, gte, lte, sql } from "drizzle-orm";
+import { applications, db, type Job, jobs } from "@bitwork/db";
+import { and, count, desc, eq, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { z } from "zod";
+import { createClient } from "@/lib/supabase/server";
+
+const jobSchema = z.object({
+  userType: z.string(),
+  state: z.string(),
+  city: z.string(),
+  title: z.string().min(3, "Title must be at least 3 characters"),
+  hourlyRate: z
+    .string()
+    .refine((val) => !Number.isNaN(Number.parseFloat(val)), {
+      message: "Hourly rate must be a number",
+    }),
+  description: z.string().min(10, "Description must be at least 10 characters"),
+  hasTimeline: z.boolean(),
+  duration: z.string().optional(),
+});
+
+export async function createJob(data: z.infer<typeof jobSchema>) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/auth");
+  }
+
+  const validation = jobSchema.safeParse(data);
+
+  if (!validation.success) {
+    return {
+      error:
+        "Invalid input: " +
+        validation.error.issues.map((e) => e.message).join(", "),
+    };
+  }
+
+  const { title, description, state, city, hourlyRate, hasTimeline, duration } =
+    validation.data;
+
+  try {
+    await db.insert(jobs).values({
+      providerId: user.id,
+      title,
+      description,
+      state,
+      city,
+      hourlyRate: Number.parseInt(hourlyRate, 10), // Assuming logic for now; schema says integer
+      hasTimeline,
+      duration: hasTimeline ? duration : null,
+      status: "open",
+    });
+  } catch (error) {
+    console.error("Error creating job:", error);
+    return {
+      error: "Failed to create job. Please try again later.",
+    };
+  }
+
+  revalidatePath("/dashboard");
+  revalidatePath("/home");
+  revalidatePath("/home/jobs");
+  return { success: true };
+}
+
+export async function getProviderStats(userId: string) {
+  const [activeJobs] = await db
+    .select({ count: count() })
+    .from(jobs)
+    .where(and(eq(jobs.providerId, userId), eq(jobs.status, "open")));
+
+  const [totalApplications] = await db
+    .select({ count: count() })
+    .from(applications)
+    .innerJoin(jobs, eq(applications.jobId, jobs.id))
+    .where(eq(jobs.providerId, userId));
+
+  const [pendingApplications] = await db
+    .select({ count: count() })
+    .from(applications)
+    .innerJoin(jobs, eq(applications.jobId, jobs.id))
+    .where(
+      and(eq(jobs.providerId, userId), eq(applications.status, "pending"))
+    );
+
+  const [totalViews] = await db
+    .select({ count: sql<number>`sum(${jobs.viewCount})` })
+    .from(jobs)
+    .where(eq(jobs.providerId, userId));
+
+  return {
+    activeJobs: activeJobs?.count ?? 0,
+    totalApplications: totalApplications?.count ?? 0,
+    pendingApplications: pendingApplications?.count ?? 0,
+    totalViews: Number(totalViews?.count ?? 0),
+  };
+}
+
+export function getProviderJobs(userId: string, status?: Job["status"]) {
+  const whereConditions = [eq(jobs.providerId, userId)];
+
+  if (status) {
+    whereConditions.push(eq(jobs.status, status));
+  }
+
+  return db
+    .select()
+    .from(jobs)
+    .where(and(...whereConditions))
+    .orderBy(desc(jobs.createdAt));
+}
 
 export interface JobFilters {
   category?: string;
@@ -51,6 +157,7 @@ export async function getJobs(
   } = filters;
 
   const offset = (page - 1) * limit;
+  const { profiles, savedJobs } = await import("@bitwork/db");
 
   const whereConditions = [eq(jobs.status, status as Job["status"])];
 
@@ -67,35 +174,36 @@ export async function getJobs(
   }
 
   if (minBudget !== undefined) {
+    const { gte } = await import("drizzle-orm");
     whereConditions.push(gte(jobs.budget, minBudget));
   }
 
   if (maxBudget !== undefined) {
+    const { lte } = await import("drizzle-orm");
     whereConditions.push(lte(jobs.budget, maxBudget));
   }
 
-  const [jobsData, totalCount] = await Promise.all([
-    db
-      .select({
-        job: jobs,
-        provider: {
-          fullName: profiles.fullName,
-          avatarUrl: profiles.avatarUrl,
-          location: profiles.location,
-        },
-      })
-      .from(jobs)
-      .leftJoin(profiles, eq(jobs.providerId, profiles.id))
-      .where(and(...whereConditions))
-      .orderBy(desc(jobs.createdAt))
-      .limit(limit)
-      .offset(offset),
-    db
-      .select({ count: count() })
-      .from(jobs)
-      .where(and(...whereConditions))
-      .then((result) => result[0]?.count ?? 0),
-  ]);
+  const jobsData = await db
+    .select({
+      job: jobs,
+      provider: {
+        fullName: profiles.fullName,
+        avatarUrl: profiles.avatarUrl,
+        location: profiles.location,
+      },
+    })
+    .from(jobs)
+    .leftJoin(profiles, eq(jobs.providerId, profiles.id))
+    .where(and(...whereConditions))
+    .orderBy(desc(jobs.createdAt))
+    .limit(limit)
+    .offset(offset);
+
+  const totalCount = await db
+    .select({ count: count() })
+    .from(jobs)
+    .where(and(...whereConditions))
+    .then((result) => result[0]?.count ?? 0);
 
   let savedJobIds = new Set<string>();
   if (userId) {
@@ -128,244 +236,9 @@ export async function getJobs(
   };
 }
 
-export async function getJobById(
-  jobId: string,
-  userId?: string
-): Promise<JobWithProvider | null> {
-  const [result] = await db
-    .select({
-      job: jobs,
-      provider: {
-        fullName: profiles.fullName,
-        avatarUrl: profiles.avatarUrl,
-        location: profiles.location,
-      },
-    })
-    .from(jobs)
-    .leftJoin(profiles, eq(jobs.providerId, profiles.id))
-    .where(eq(jobs.id, jobId));
-
-  if (!result) {
-    return null;
-  }
-
-  let isSaved = false;
-  if (userId) {
-    const [saved] = await db
-      .select()
-      .from(savedJobs)
-      .where(and(eq(savedJobs.userId, userId), eq(savedJobs.jobId, jobId)));
-    isSaved = !!saved;
-  }
-
-  await db
-    .update(jobs)
-    .set({ viewCount: sql`${jobs.viewCount} + 1` })
-    .where(eq(jobs.id, jobId));
-
-  return {
-    ...result.job,
-    provider: result.provider,
-    isSaved,
-  };
-}
-
-export interface CreateJobInput {
-  title: string;
-  description: string;
-  category?: string;
-  budget?: number;
-  hourlyRate?: number;
-  state?: string;
-  city?: string;
-  duration?: string;
-  hasTimeline?: boolean;
-  skills?: string[];
-  providerId: string;
-}
-
-export async function createJob(
-  data: CreateJobInput
-): Promise<{ success: boolean; job?: Job; error?: string }> {
-  try {
-    const [job] = await db
-      .insert(jobs)
-      .values({
-        ...data,
-        status: "open",
-        viewCount: 0,
-      })
-      .returning();
-
-    revalidatePath("/home/jobs");
-    revalidatePath("/home");
-
-    return { success: true, job };
-  } catch (error) {
-    console.error("Error creating job:", error);
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : "Failed to create job",
-    };
-  }
-}
-
-export async function updateJob(
-  jobId: string,
-  providerId: string,
-  data: Partial<CreateJobInput>
-): Promise<{ success: boolean; error?: string }> {
-  try {
-    const [job] = await db.select().from(jobs).where(eq(jobs.id, jobId));
-
-    if (!job) {
-      return { success: false, error: "Job not found" };
-    }
-
-    if (job.providerId !== providerId) {
-      return { success: false, error: "Unauthorized" };
-    }
-
-    await db
-      .update(jobs)
-      .set({
-        ...data,
-        updatedAt: new Date(),
-      })
-      .where(eq(jobs.id, jobId));
-
-    revalidatePath("/home/jobs");
-    revalidatePath(`/home/jobs/${jobId}`);
-
-    return { success: true };
-  } catch (error) {
-    console.error("Error updating job:", error);
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : "Failed to update job",
-    };
-  }
-}
-
-export async function deleteJob(
-  jobId: string,
-  providerId: string
-): Promise<{ success: boolean; error?: string }> {
-  try {
-    const [job] = await db.select().from(jobs).where(eq(jobs.id, jobId));
-
-    if (!job) {
-      return { success: false, error: "Job not found" };
-    }
-
-    if (job.providerId !== providerId) {
-      return { success: false, error: "Unauthorized" };
-    }
-
-    await db.delete(jobs).where(eq(jobs.id, jobId));
-
-    revalidatePath("/home/jobs");
-    revalidatePath("/home");
-
-    return { success: true };
-  } catch (error) {
-    console.error("Error deleting job:", error);
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : "Failed to delete job",
-    };
-  }
-}
-
-export function getProviderJobs(
-  providerId: string,
-  status?: Job["status"]
-): Promise<Job[]> {
-  const whereConditions = [eq(jobs.providerId, providerId)];
-
-  if (status) {
-    whereConditions.push(eq(jobs.status, status));
-  }
-
-  return db
-    .select()
-    .from(jobs)
-    .where(and(...whereConditions))
-    .orderBy(desc(jobs.createdAt));
-}
-
-export async function getProviderStats(providerId: string): Promise<{
-  activeJobs: number;
-  totalApplications: number;
-  pendingApplications: number;
-  totalViews: number;
-}> {
-  const [activeJobsResult, totalAppsResult, pendingAppsResult, viewsResult] =
-    await Promise.all([
-      db
-        .select({ count: count() })
-        .from(jobs)
-        .where(and(eq(jobs.providerId, providerId), eq(jobs.status, "open"))),
-      db
-        .select({ count: count() })
-        .from(applications)
-        .innerJoin(jobs, eq(applications.jobId, jobs.id))
-        .where(eq(jobs.providerId, providerId)),
-      db
-        .select({ count: count() })
-        .from(applications)
-        .innerJoin(jobs, eq(applications.jobId, jobs.id))
-        .where(
-          and(
-            eq(jobs.providerId, providerId),
-            eq(applications.status, "pending")
-          )
-        ),
-      db
-        .select({ total: sql<number>`sum(${jobs.viewCount})` })
-        .from(jobs)
-        .where(eq(jobs.providerId, providerId)),
-    ]);
-
-  return {
-    activeJobs: activeJobsResult[0]?.count ?? 0,
-    totalApplications: totalAppsResult[0]?.count ?? 0,
-    pendingApplications: pendingAppsResult[0]?.count ?? 0,
-    totalViews: viewsResult[0]?.total ?? 0,
-  };
-}
-
-export async function toggleSaveJob(
-  userId: string,
-  jobId: string
-): Promise<{ saved: boolean; error?: string }> {
-  try {
-    const [existing] = await db
-      .select()
-      .from(savedJobs)
-      .where(and(eq(savedJobs.userId, userId), eq(savedJobs.jobId, jobId)));
-
-    if (existing) {
-      await db
-        .delete(savedJobs)
-        .where(and(eq(savedJobs.userId, userId), eq(savedJobs.jobId, jobId)));
-      revalidatePath("/home/saved");
-      return { saved: false };
-    }
-
-    await db.insert(savedJobs).values({ userId, jobId });
-    revalidatePath("/home/saved");
-    return { saved: true };
-  } catch (error) {
-    console.error("Error toggling save job:", error);
-    return {
-      saved: false,
-      error: error instanceof Error ? error.message : "Failed to save job",
-    };
-  }
-}
-
 export async function getSavedJobs(userId: string): Promise<JobWithProvider[]> {
+  const { profiles, savedJobs } = await import("@bitwork/db");
+
   const savedJobsData = await db
     .select({
       job: jobs,
@@ -395,4 +268,36 @@ export async function getSavedJobs(userId: string): Promise<JobWithProvider[]> {
       isSaved: true,
     })
   );
+}
+
+export async function toggleSaveJob(
+  userId: string,
+  jobId: string
+): Promise<{ saved: boolean; error?: string }> {
+  try {
+    const { savedJobs } = await import("@bitwork/db");
+
+    const [existing] = await db
+      .select()
+      .from(savedJobs)
+      .where(and(eq(savedJobs.userId, userId), eq(savedJobs.jobId, jobId)));
+
+    if (existing) {
+      await db
+        .delete(savedJobs)
+        .where(and(eq(savedJobs.userId, userId), eq(savedJobs.jobId, jobId)));
+      revalidatePath("/home/saved");
+      return { saved: false };
+    }
+
+    await db.insert(savedJobs).values({ userId, jobId });
+    revalidatePath("/home/saved");
+    return { saved: true };
+  } catch (error) {
+    console.error("Error toggling save job:", error);
+    return {
+      saved: false,
+      error: error instanceof Error ? error.message : "Failed to save job",
+    };
+  }
 }

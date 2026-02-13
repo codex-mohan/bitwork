@@ -112,15 +112,15 @@ export function NotificationBell({ userId }: NotificationBellProps) {
 
   return (
     <DropdownMenu onOpenChange={setIsOpen} open={isOpen}>
-      <DropdownMenuTrigger>
-        <Button className="relative" size="icon" variant="ghost">
-          <Bell className="h-5 w-5" />
-          {unreadCount > 0 && (
-            <span className="zoom-in-50 absolute -top-1 -right-1 flex h-5 w-5 animate-in items-center justify-center rounded-full bg-destructive font-bold text-destructive-foreground text-xs duration-200">
-              {unreadCount > 9 ? "9+" : unreadCount}
-            </span>
-          )}
-        </Button>
+      <DropdownMenuTrigger
+        render={<Button className="relative" size="icon" variant="ghost" />}
+      >
+        <Bell className="h-5 w-5" />
+        {unreadCount > 0 && (
+          <span className="zoom-in-50 absolute -top-1 -right-1 flex h-5 w-5 animate-in items-center justify-center rounded-full bg-destructive font-bold text-destructive-foreground text-xs duration-200">
+            {unreadCount > 9 ? "9+" : unreadCount}
+          </span>
+        )}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-80">
         <div className="flex items-center justify-between border-b px-4 py-3">

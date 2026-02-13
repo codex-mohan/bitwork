@@ -52,17 +52,11 @@ function useVerificationPolling(
       return;
     }
 
-    const interval = setInterval(async () => {
+    // Check immediately if already authenticated (handles page refresh)
+    const checkInitialSession = async () => {
       const {
         data: { session },
-        error,
       } = await supabase.auth.getSession();
-
-      if (error) {
-        console.error("Error checking session:", error);
-        return;
-      }
-
       if (session) {
         setVerificationState("verified");
         toast.success("Email verified successfully!");
@@ -71,9 +65,26 @@ function useVerificationPolling(
           router.refresh();
         }, 1500);
       }
-    }, 3000);
+    };
+    checkInitialSession();
 
-    return () => clearInterval(interval);
+    // Listen for auth state changes (works across tabs via BroadcastChannel)
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN" && session) {
+        setVerificationState("verified");
+        toast.success("Email verified successfully!");
+        setTimeout(() => {
+          router.push("/home");
+          router.refresh();
+        }, 1500);
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [verificationState, setVerificationState, router, supabase]);
 }
 
@@ -992,7 +1003,7 @@ export function AuthForm({ initialMode = "signup" }: AuthFormProps) {
     <div className="flex w-full flex-1 flex-col items-center justify-center p-4 sm:p-6 md:p-8">
       <div className="w-full max-w-md space-y-4 sm:space-y-5">
         {/* Header */}
-        <div className="flex flex-col items-start space-y-2 text-left sm:space-y-3">
+        <div className="flex flex-col items-center space-y-2 text-center sm:space-y-3">
           <Image
             alt="Bitwork"
             className="h-7 w-7 sm:h-8 sm:w-8"
@@ -1001,13 +1012,13 @@ export function AuthForm({ initialMode = "signup" }: AuthFormProps) {
             src="/bitwork.svg"
             width={32}
           />
-          <div className="space-y-1 sm:space-y-2">
-            <h2 className="font-serif text-foreground text-xl sm:text-2xl">
+          <div className="w-full space-y-1 sm:space-y-2">
+            <h2 className="text-center font-serif text-foreground text-xl sm:text-2xl">
               {authMode === "signup"
                 ? "Create your Bitwork account"
                 : "Welcome back to Bitwork"}
             </h2>
-            <p className="text-muted-foreground text-sm">
+            <p className="text-center text-muted-foreground text-sm">
               {authMode === "signup" ? (
                 <>
                   {currentStep === "credentials" &&

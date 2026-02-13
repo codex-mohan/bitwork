@@ -15,6 +15,13 @@
       "when": 1770877870915,
       "tag": "0001_mature_pixie",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1770955927939,
+      "tag": "0002_wandering_sprite",
+      "breakpoints": true
     }
   ]
 }

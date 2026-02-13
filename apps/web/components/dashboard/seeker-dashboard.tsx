@@ -22,25 +22,25 @@ async function DashboardContent({ userId }: SeekerDashboardProps) {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatsCard
           color="primary"
-          icon={Briefcase}
+          icon={<Briefcase className="h-6 w-6" />}
           title="Total Applications"
           value={stats.totalApplications}
         />
         <StatsCard
           color="warning"
-          icon={Clock}
+          icon={<Clock className="h-6 w-6" />}
           title="Pending"
           value={stats.pendingApplications}
         />
         <StatsCard
           color="success"
-          icon={CheckCircle}
+          icon={<CheckCircle className="h-6 w-6" />}
           title="Accepted"
           value={stats.acceptedApplications}
         />
         <StatsCard
           color="info"
-          icon={TrendingUp}
+          icon={<TrendingUp className="h-6 w-6" />}
           title="Response Rate"
           value={`${stats.totalApplications > 0 ? Math.round(((stats.acceptedApplications + stats.rejectedApplications) / stats.totalApplications) * 100) : 0}%`}
         />

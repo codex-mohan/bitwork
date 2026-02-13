@@ -1,7 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   let response = NextResponse.next({
     request: {
       headers: request.headers,
@@ -12,10 +12,10 @@ export async function middleware(request: NextRequest) {
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   // Return early if environment variables are not configured
-  // This prevents MIDDLEWARE_INVOCATION_FAILED errors in deployment
+  // This prevents PROXY_INVOCATION_FAILED errors in deployment
   if (!(supabaseUrl && supabaseKey)) {
     console.warn(
-      "Supabase URL and Key are not configured - skipping auth middleware"
+      "Supabase URL and Key are not configured - skipping auth proxy"
     );
     return response;
   }

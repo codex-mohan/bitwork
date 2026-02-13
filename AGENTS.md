@@ -54,6 +54,7 @@ Write code that is **accessible, performant, type-safe, and maintainable**. Focu
   - Add labels for form inputs
   - Include keyboard event handlers alongside mouse events
   - Use semantic elements (`<button>`, `<nav>`, etc.) instead of divs with roles
+- Use framer motion if available for smooth animations.
 
 ### Error Handling & Debugging
 

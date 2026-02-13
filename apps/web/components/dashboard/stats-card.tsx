@@ -2,12 +2,12 @@
 
 import { Card, CardContent } from "@bitwork/ui/components/card";
 import { cn } from "@bitwork/ui/lib/utils";
-import type { LucideIcon } from "lucide-react";
 
 interface StatsCardProps {
   title: string;
   value: string | number;
-  icon: LucideIcon;
+  icon: React.ReactNode;
+
   trend?: {
     value: string;
     direction: "up" | "down" | "neutral";
@@ -27,7 +27,7 @@ const colorVariants = {
 export function StatsCard({
   title,
   value,
-  icon: Icon,
+  icon,
   trend,
   color = "default",
   className,
@@ -62,7 +62,7 @@ export function StatsCard({
               colorVariants[color]
             )}
           >
-            <Icon className="h-6 w-6" />
+            {icon}
           </div>
         </div>
       </CardContent>
