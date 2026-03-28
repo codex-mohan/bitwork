@@ -32,7 +32,7 @@ This document provides guidance for agents working on the Bitwork project.
 | Framework | Next.js 16 (App Router) |
 | Language | TypeScript 5.9 |
 | Styling | Tailwind CSS v4 |
-| Database | **Neon DB** (PostgreSQL) |
+| Database | **Supabase** (PostgreSQL) |
 | ORM | Drizzle ORM |
 | Runtime | Bun |
 | Monorepo | Turborepo |
@@ -91,7 +91,7 @@ The database uses PostgreSQL via Neon DB with Drizzle ORM.
 ### Database Operations
 ```bash
 bun run db:gen    # Generate migrations
-bun run db:push   # Push schema changes to Neon DB
+bun run db:push   # Push schema changes to Supabase
 ```
 
 ---
@@ -269,13 +269,13 @@ Reusable components live in `@bitwork/ui`:
 
 ### Environment Variables Required
 ```env
-DATABASE_URL=          # Neon DB connection string
+DATABASE_URL=          # Supabase connection string
 ```
 
 ### Schema Updates
 1. Modify `packages/db/src/schema.ts`
 2. Run `bun run db:gen` to generate migrations
-3. Run `bun run db:push` to apply changes to Neon DB
+3. Run `bun run db:push` to apply changes to Supabase
 
 ### Type Generation
 Drizzle generates TypeScript types from schema:

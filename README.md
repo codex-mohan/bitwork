@@ -80,7 +80,7 @@ Existing solutions focus on either full employment or gig marketplaces, which in
 | **Framework** | Next.js 16, React 19 |
 | **Language** | TypeScript 5.9 |
 | **Styling** | Tailwind CSS v4 |
-| **Database** | Drizzle ORM |
+| **Database** | Supabase (PostgreSQL) |
 | **Runtime** | Bun |
 | **Monorepo** | Turborepo |
 
