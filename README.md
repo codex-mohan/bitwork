@@ -97,7 +97,7 @@ Existing solutions focus on either full employment or gig marketplaces, which in
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/bitwork.git
+git clone https://github.com/codex-mohan/bitwork.git
 cd bitwork
 
 # Install dependencies

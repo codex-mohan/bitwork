@@ -1,14 +1,124 @@
-# Ultracite Code Standards
+# Bitwork Agent Guidelines
 
-This project uses **Ultracite**, a zero-config preset that enforces strict code quality standards through automated formatting and linting.
+> **Repository**: https://github.com/codex-mohan/bitwork
+
+This document provides guidance for agents working on the Bitwork project.
+
+---
+
+# Project Overview
+
+**Bitwork** is a modern job board platform designed to connect informal workers (plumbers, electricians, tutors, etc.) with households and small businesses needing short-duration, task-specific work in India.
+
+### Key Features
+- Two-sided marketplace: Service **providers** post jobs, **seekers** apply
+- Location-based job discovery
+- Application tracking and management
+- Real-time notifications
+- Portable reputation system
+
+### Current State
+- Early development stage
+- Core features: landing page, dashboard, job posting, applications
+- Database schema defined, partial implementation
+- Authentication via Supabase
+
+---
+
+# Tech Stack
+
+| Category | Technology |
+|----------|------------|
+| Framework | Next.js 16 (App Router) |
+| Language | TypeScript 5.9 |
+| Styling | Tailwind CSS v4 |
+| Database | **Neon DB** (PostgreSQL) |
+| ORM | Drizzle ORM |
+| Runtime | Bun |
+| Monorepo | Turborepo |
+| UI Components | Custom `@bitwork/ui` package |
+| Auth | Supabase Auth |
+
+---
+
+# Project Structure
+
+```
+bitwork/
+├── apps/
+│   └── web/                 # Next.js web application
+│       ├── app/             # App Router pages
+│       │   ├── home/        # Dashboard routes
+│       │   ├── post-job/    # Job creation
+│       │   └── contact/     # Contact page
+│       ├── components/
+│       │   ├── dashboard/   # Dashboard components
+│       │   ├── landing/     # Landing page components
+│       │   └── *.tsx        # Shared components
+│       ├── lib/             # Utilities and helpers
+│       │   └── supabase/    # Supabase client/server setup
+│       └── public/          # Static assets
+├── packages/
+│   ├── ui/                  # Shared UI component library
+│   │   └── src/components/  # shadcn/ui-style components
+│   ├── db/                  # Database package
+│   │   └── src/
+│   │       ├── schema.ts   # Drizzle schema definitions
+│   │       └── env.ts      # Environment validation
+│   └── configs/             # Shared TypeScript configs
+├── docs/
+│   └── architecture/        # Architecture documentation
+│       ├── OVERVIEW.md     # System architecture
+│       └── DATABASE.md     # Database schema docs
+└── scripts/                # Setup and utility scripts
+```
+
+---
+
+# Database Schema (Neon DB)
+
+The database uses PostgreSQL via Neon DB with Drizzle ORM.
+
+### Tables
+- **profiles** - User profiles (name, role, location, skills, availability)
+- **jobs** - Job postings (title, description, budget, location, status)
+- **applications** - Job applications (status: pending/accepted/rejected)
+- **saved_jobs** - User bookmarks
+- **notifications** - User notifications
+- **messages** - Direct messages (future feature)
+- **user_preferences** - User settings
+
+### Database Operations
+```bash
+bun run db:gen    # Generate migrations
+bun run db:push   # Push schema changes to Neon DB
+```
+
+---
+
+# Development Commands
+
+```bash
+bun run dev          # Start development server (http://localhost:3000)
+bun run build        # Build for production
+bun run check-types  # TypeScript type checking
+bun run check       # Lint & format code (Ultracite)
+bun run env          # Set up environment variables
+bun run db:gen       # Generate Drizzle migrations
+bun run db:push      # Push schema to database
+```
+
+---
+
+# Code Style & Quality
+
+This project uses **Ultracite** (Biome-based) for code quality.
 
 ## Quick Reference
 
 - **Format code**: `bun x ultracite fix`
 - **Check for issues**: `bun x ultracite check`
 - **Diagnose setup**: `bun x ultracite doctor`
-
-Biome (the underlying engine) provides robust linting and formatting. Most issues are automatically fixable.
 
 ---
 
@@ -121,4 +231,112 @@ Biome's linter will catch most issues automatically. Focus your attention on:
 
 ---
 
-Most formatting and common issues are automatically fixed by Biome. Run `bun x ultracite fix` before committing to ensure compliance.
+# Naming Conventions
+
+| Item | Convention | Example |
+|------|------------|---------|
+| Components | PascalCase | `JobCard`, `DashboardLayout` |
+| Hooks | `use` prefix + camelCase | `useJobs`, `useNotifications` |
+| Server Actions | camelCase | `getJobs`, `createApplication` |
+| Types/Interfaces | PascalCase | `JobFilters`, `ApplicationStatus` |
+| Database Tables | snake_case | `user_profiles`, `job_listings` |
+| Files | kebab-case | `job-card.tsx`, `use-jobs.ts` |
+| Environment Variables | SCREAMING_SNAKE_CASE | `DATABASE_URL`, `SUPABASE_KEY` |
+
+---
+
+# Component Patterns
+
+### Role-Based Components
+The dashboard adapts based on user role (`provider` or `seeker`):
+- **Providers**: Post jobs, manage applications, view analytics
+- **Seekers**: Browse jobs, apply to jobs, track applications
+
+### Server vs Client Components
+- Use **Server Components** for data fetching and static content
+- Use **Client Components** (`'use client'`) only when interactivity is needed
+- Keep client boundaries minimal for better performance
+
+### UI Package
+Reusable components live in `@bitwork/ui`:
+- Base components (Button, Card, Input, etc.)
+- Styled with Tailwind CSS
+- Located in `packages/ui/src/components/`
+
+---
+
+# Database Operations
+
+### Environment Variables Required
+```env
+DATABASE_URL=          # Neon DB connection string
+```
+
+### Schema Updates
+1. Modify `packages/db/src/schema.ts`
+2. Run `bun run db:gen` to generate migrations
+3. Run `bun run db:push` to apply changes to Neon DB
+
+### Type Generation
+Drizzle generates TypeScript types from schema:
+```typescript
+import type { Job, Profile, Application } from '@bitwork/db';
+```
+
+---
+
+# Version Control & Collaboration
+
+## Committing Changes
+
+**Always commit and push functional features to GitHub.** Do not leave completed, working features uncommitted. Follow these guidelines:
+
+1. **Run code quality checks before committing**:
+   ```bash
+   bun run check       # Lint & format code
+   bun run check-types # TypeScript type checking
+   ```
+
+2. **Commit message format**:
+   - Use clear, descriptive commit messages
+   - Start with a verb: `Add`, `Fix`, `Update`, `Remove`, `Implement`
+   - Keep the first line under 72 characters
+   - Add body text for complex changes
+
+3. **Commit timing**:
+   - Commit functional features as soon as they are complete and tested
+   - Do not accumulate multiple unrelated changes in one commit
+   - Use atomic commits (one logical change per commit)
+
+## Pushing to Remote
+
+- Push to the remote repository after every functional commit
+- Always push to your feature branch first, then create a PR
+- Never force push to `main` or `master`
+- Keep your feature branches up to date with the base branch
+
+## Branch Naming
+
+- Feature branches: `feature/<short-description>`
+- Bug fixes: `fix/<short-description>`
+- Documentation: `docs/<short-description>`
+- Examples: `feature/job-posting`, `fix/auth-redirect`, `docs/api-reference`
+
+---
+
+# Important Notes
+
+1. **Run `bun x ultracite fix` before committing** to ensure code compliance
+2. **Use Server Components** where possible for better performance
+3. **Keep bundle sizes small** - avoid importing entire libraries
+4. **Test database changes locally** before pushing to production
+5. **Check existing components** before creating new ones - reuse from `@bitwork/ui`
+6. **Commit and push functional features immediately** - do not leave working code uncommitted
+
+---
+
+# Documentation References
+
+- [Technical Documentation](docs/TECHNICAL.md) - Detailed tech stack info
+- [Architecture Overview](docs/architecture/OVERVIEW.md) - System design
+- [Database Schema](docs/architecture/DATABASE.md) - Table definitions
