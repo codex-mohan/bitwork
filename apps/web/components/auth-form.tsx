@@ -52,7 +52,6 @@ function useVerificationPolling(
       return;
     }
 
-    // Check immediately if already authenticated (handles page refresh)
     const checkInitialSession = async () => {
       const {
         data: { session },
@@ -68,7 +67,6 @@ function useVerificationPolling(
     };
     checkInitialSession();
 
-    // Listen for auth state changes (works across tabs via BroadcastChannel)
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
@@ -259,16 +257,6 @@ function useAuthHandlers(
   return { handleAuth, handleResendEmail, handleGoogleAuth };
 }
 
-function getStepButtonClass(isCompleted: boolean, isActive: boolean) {
-  if (isCompleted) {
-    return "scale-100 border-primary bg-primary text-primary-foreground";
-  }
-  if (isActive) {
-    return "scale-110 border-primary bg-background text-primary shadow-lg shadow-primary/20 ring-4 ring-primary/5";
-  }
-  return "border-border bg-background text-muted-foreground";
-}
-
 function getSlideClass(
   currentStep: WizardStep,
   stepName: WizardStep,
@@ -326,12 +314,12 @@ function VerificationWaitingScreen({
   onSwitchToSignIn,
 }: VerificationWaitingScreenProps) {
   return (
-    <div className="flex w-full max-w-md flex-col items-center justify-center p-6 text-center">
-      <div className="mb-6 flex h-20 w-20 animate-pulse items-center justify-center rounded-full bg-primary/10">
-        <Inbox className="h-10 w-10 text-primary" />
+    <div className="flex w-full max-w-sm flex-col items-center p-6 text-center">
+      <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
+        <Inbox className="h-8 w-8 text-primary" />
       </div>
 
-      <h2 className="mb-2 font-serif text-foreground text-xl sm:text-2xl">
+      <h2 className="mb-2 font-serif text-foreground text-xl">
         Verify Your Email
       </h2>
 
@@ -340,51 +328,51 @@ function VerificationWaitingScreen({
         check your inbox and click the link to continue.
       </p>
 
-      <div className="mb-6 w-full rounded-xl border border-border bg-secondary/30 p-6">
-        <div className="mb-4 flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-500/10">
-            <RefreshCw className="h-5 w-5 animate-spin text-yellow-600" />
+      <div className="mb-6 w-full rounded-lg border border-border/50 bg-secondary/30 p-4">
+        <div className="mb-3 flex items-center gap-3">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500/10">
+            <RefreshCw className="h-4 w-4 animate-spin text-yellow-600" />
           </div>
           <div className="text-left">
             <p className="font-medium text-sm">Waiting for verification</p>
             <p className="text-muted-foreground text-xs">
-              Please check your email and click the verification link
+              Check your email and click the link
             </p>
           </div>
         </div>
 
-        <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
-          <div className="h-full w-full animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+        <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
+          <div className="h-full w-full animate-pulse bg-[length:200%_100%] bg-gradient-to-r from-primary/30 via-primary/50 to-primary/30" />
         </div>
       </div>
 
-      <div className="w-full space-y-3">
+      <div className="w-full space-y-2">
         <Button
-          className="h-11 w-full rounded-full bg-primary font-medium text-primary-foreground text-sm"
+          className="h-10 w-full rounded-lg bg-primary font-medium text-primary-foreground"
           disabled={countdown > 0 || isLoading}
           onClick={onResendEmail}
         >
-          {(() => {
-            if (isLoading) {
-              return <Loader2 className="mr-2 h-4 w-4 animate-spin" />;
-            }
-            if (countdown > 0) {
-              return `Resend email in ${countdown}s`;
-            }
-            return "Resend Verification Email";
-          })()}
+          {isLoading ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <span>
+              {countdown > 0
+                ? `Resend in ${countdown}s`
+                : "Resend Verification Email"}
+            </span>
+          )}
         </Button>
 
         <Button
-          className="h-11 w-full rounded-full font-medium text-sm"
+          className="h-9 w-full rounded-lg font-medium text-sm"
           onClick={onChangeEmail}
-          variant="outline"
+          variant="ghost"
         >
           Use Different Email
         </Button>
 
         <Button
-          className="h-11 w-full rounded-full font-medium text-sm"
+          className="h-9 w-full rounded-lg font-medium text-muted-foreground text-sm"
           onClick={onSwitchToSignIn}
           variant="ghost"
         >
@@ -392,38 +380,30 @@ function VerificationWaitingScreen({
         </Button>
       </div>
 
-      <div className="mt-6 space-y-2 text-muted-foreground text-xs">
-        <p>
-          Didn&apos;t receive the email? Check your spam folder or try
-          resending.
-        </p>
-        <p className="text-[10px] opacity-70">
-          Already clicked the link? Keep this page open - we&apos;ll detect it
-          automatically.
-        </p>
-      </div>
+      <p className="mt-4 text-muted-foreground text-xs">
+        Didn&apos;t receive the email? Check your spam folder.
+      </p>
     </div>
   );
 }
 
 function VerificationSuccessScreen() {
   return (
-    <div className="flex w-full max-w-md flex-col items-center justify-center p-6 text-center">
-      <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-green-500/10">
-        <Check className="h-10 w-10 text-green-600" />
+    <div className="flex w-full max-w-sm flex-col items-center p-6 text-center">
+      <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-green-500/10">
+        <Check className="h-8 w-8 text-green-600" />
       </div>
 
-      <h2 className="mb-2 font-serif text-foreground text-xl sm:text-2xl">
+      <h2 className="mb-2 font-serif text-foreground text-xl">
         Email Verified!
       </h2>
 
       <p className="mb-6 text-muted-foreground text-sm">
-        Your email has been verified successfully. Redirecting you to the
-        dashboard...
+        Your email has been verified. Redirecting...
       </p>
 
-      <div className="h-2 w-48 overflow-hidden rounded-full bg-muted">
-        <div className="h-full w-full animate-[shimmer_1s_infinite] bg-gradient-to-r from-transparent via-primary to-transparent" />
+      <div className="h-1.5 w-32 overflow-hidden rounded-full bg-muted">
+        <div className="h-full w-full animate-pulse bg-[length:200%_100%] bg-gradient-to-r from-transparent via-primary to-transparent" />
       </div>
     </div>
   );
@@ -441,10 +421,19 @@ function StepIndicator({
   const currentIndex = steps.findIndex((s) => s.id === currentStep);
 
   return (
-    <div className="relative flex items-center justify-between overflow-x-hidden">
+    <div className="relative flex items-center justify-between px-2">
       {steps.map((step, i) => {
         const isCompleted = i < currentIndex;
         const isActive = step.id === currentStep;
+        let buttonClass: string;
+        if (isCompleted) {
+          buttonClass = "border-primary bg-primary text-primary-foreground";
+        } else if (isActive) {
+          buttonClass =
+            "border-primary bg-background text-primary shadow-md ring-4 ring-primary/10";
+        } else {
+          buttonClass = "border-border bg-background text-muted-foreground";
+        }
 
         return (
           <div
@@ -452,10 +441,7 @@ function StepIndicator({
             key={step.id}
           >
             <button
-              className={`flex h-9 w-9 items-center justify-center rounded-full border-2 font-mono text-xs transition-all duration-500 sm:h-10 sm:w-10 ${getStepButtonClass(
-                isCompleted,
-                isActive
-              )}`}
+              className={`flex h-8 w-8 items-center justify-center rounded-full border-2 font-medium text-xs transition-all ${buttonClass}`}
               onClick={() => {
                 if (isCompleted || isActive) {
                   onStepClick(step.id);
@@ -463,14 +449,10 @@ function StepIndicator({
               }}
               type="button"
             >
-              {isCompleted ? (
-                <Check className="h-4 w-4 animate-[scaleIn_0.3s_ease-out_both]" />
-              ) : (
-                step.number
-              )}
+              {isCompleted ? <Check className="h-4 w-4" /> : step.number}
             </button>
             <span
-              className={`mt-1.5 font-mono text-[10px] uppercase tracking-wider transition-colors duration-300 sm:mt-2 sm:text-xs ${
+              className={`mt-2 text-[10px] uppercase tracking-wide ${
                 isActive ? "text-foreground" : "text-muted-foreground"
               }`}
             >
@@ -479,10 +461,9 @@ function StepIndicator({
           </div>
         );
       })}
-      {/* Connecting line */}
-      <div className="absolute top-4 right-12 left-12 h-0.5 bg-border sm:top-5 sm:right-14 sm:left-14">
+      <div className="absolute top-4 right-8 left-8 h-0.5 bg-border">
         <div
-          className="h-full rounded-full bg-primary transition-all duration-700 ease-out"
+          className="h-full rounded-full bg-primary transition-all duration-500"
           style={{
             width: `${(currentIndex / (steps.length - 1)) * 100}%`,
           }}
@@ -506,14 +487,14 @@ function SignInForm({
   handleGoogleAuth: () => void;
 }) {
   return (
-    <div className="fade-in slide-in-from-bottom-2 animate-in space-y-4 duration-500">
+    <div className="w-full max-w-sm space-y-5 p-6">
       <Button
-        className="h-11 w-full gap-3 rounded-full border-border font-medium text-sm sm:h-12 sm:text-base"
+        className="h-11 w-full gap-3 rounded-lg border-border font-medium"
         disabled={isLoading}
         onClick={handleGoogleAuth}
         variant="outline"
       >
-        <svg className="h-5 w-5 sm:h-6 sm:w-6" viewBox="0 0 24 24">
+        <svg className="h-5 w-5" viewBox="0 0 24 24">
           <title>Google</title>
           <path
             d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -535,26 +516,23 @@ function SignInForm({
         Continue with Google
       </Button>
 
-      <div className="relative my-4">
+      <div className="relative">
         <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-border border-t" />
+          <div className="w-full border-border/50 border-t" />
         </div>
-        <div className="relative flex justify-center text-[10px] uppercase">
-          <span className="bg-background px-2 font-mono text-muted-foreground">
-            Or
+        <div className="relative flex justify-center">
+          <span className="bg-background px-3 text-muted-foreground text-xs">
+            or
           </span>
         </div>
       </div>
 
-      <div className="grid gap-4 sm:gap-5">
-        <div className="grid gap-1.5 sm:gap-2">
-          <Label
-            className="font-medium text-foreground text-sm"
-            htmlFor="email"
-          >
+      <div className="space-y-4">
+        <div className="space-y-1.5">
+          <Label className="font-medium text-sm" htmlFor="email">
             Email
           </Label>
-          <InputGroup className="h-11 rounded-xl border-border sm:h-12">
+          <InputGroup className="h-10 rounded-lg border-border">
             <InputGroupAddon>
               <Mail className="size-4 text-muted-foreground" />
             </InputGroupAddon>
@@ -568,14 +546,11 @@ function SignInForm({
             />
           </InputGroup>
         </div>
-        <div className="grid gap-1.5 sm:gap-2">
-          <Label
-            className="font-medium text-foreground text-sm"
-            htmlFor="password"
-          >
+        <div className="space-y-1.5">
+          <Label className="font-medium text-sm" htmlFor="password">
             Password
           </Label>
-          <InputGroup className="h-11 rounded-xl border-border sm:h-12">
+          <InputGroup className="h-10 rounded-lg border-border">
             <InputGroupAddon>
               <Lock className="size-4 text-muted-foreground" />
             </InputGroupAddon>
@@ -591,7 +566,7 @@ function SignInForm({
         </div>
       </div>
       <Button
-        className="h-11 w-full rounded-full bg-primary font-medium text-primary-foreground text-sm transition-all duration-300 hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/20 sm:h-12 sm:text-base"
+        className="h-10 w-full rounded-lg bg-primary font-medium text-primary-foreground"
         disabled={isLoading}
         onClick={handleAuth}
       >
@@ -631,247 +606,231 @@ function SignUpWizard({
   handleAuth: () => void;
 }) {
   return (
-    <div className="overflow-hidden">
-      {/* Step 1: Credentials */}
-      <div
-        className={`transition-all duration-500 ease-out ${getSlideClass(
-          currentStep,
-          "credentials",
-          direction
-        )}`}
+    <div className="w-full max-w-sm space-y-6 p-6">
+      <Button
+        className="h-11 w-full gap-3 rounded-lg border-border font-medium"
+        disabled={isLoading}
+        onClick={handleGoogleAuth}
+        variant="outline"
       >
-        <Button
-          className="h-11 w-full gap-3 rounded-full border-border font-medium text-sm sm:h-12 sm:text-base"
-          disabled={isLoading}
-          onClick={handleGoogleAuth}
-          variant="outline"
+        <svg className="h-5 w-5" viewBox="0 0 24 24">
+          <title>Google</title>
+          <path
+            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+            fill="#4285F4"
+          />
+          <path
+            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+            fill="#34A853"
+          />
+          <path
+            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+            fill="#FBBC05"
+          />
+          <path
+            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+            fill="#EA4335"
+          />
+        </svg>
+        Continue with Google
+      </Button>
+
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-border/50 border-t" />
+        </div>
+        <div className="relative flex justify-center">
+          <span className="bg-background px-3 text-muted-foreground text-xs">
+            or
+          </span>
+        </div>
+      </div>
+
+      <div className="overflow-hidden">
+        <div
+          className={`transition-all duration-300 ${getSlideClass(
+            currentStep,
+            "credentials",
+            direction
+          )}`}
         >
-          <svg className="h-5 w-5 sm:h-6 sm:w-6" viewBox="0 0 24 24">
-            <title>Google</title>
-            <path
-              d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-              fill="#4285F4"
-            />
-            <path
-              d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-              fill="#34A853"
-            />
-            <path
-              d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-              fill="#FBBC05"
-            />
-            <path
-              d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-              fill="#EA4335"
-            />
-          </svg>
-          Continue with Google
-        </Button>
-
-        <div className="relative my-5 sm:my-6">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-border border-t" />
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 font-mono text-muted-foreground">
-              Or
-            </span>
-          </div>
-        </div>
-
-        <div className="grid gap-4 sm:gap-5">
-          <div className="grid gap-1.5 sm:gap-2">
-            <Label
-              className="font-medium text-foreground text-sm"
-              htmlFor="reg-email"
-            >
-              Email
-            </Label>
-            <InputGroup className="h-11 rounded-xl border-border sm:h-12">
-              <InputGroupAddon>
-                <Mail className="size-4 text-muted-foreground" />
-              </InputGroupAddon>
-              <InputGroupInput
-                disabled={isLoading}
-                id="reg-email"
-                onChange={(e) => updateField("email", e.target.value)}
-                placeholder="you@example.com"
-                type="email"
-                value={formData.email}
-              />
-            </InputGroup>
-          </div>
-          <div className="grid gap-1.5 sm:gap-2">
-            <Label
-              className="font-medium text-foreground text-sm"
-              htmlFor="reg-password"
-            >
-              Password
-            </Label>
-            <InputGroup className="h-11 rounded-xl border-border sm:h-12">
-              <InputGroupAddon>
-                <Lock className="size-4 text-muted-foreground" />
-              </InputGroupAddon>
-              <InputGroupInput
-                disabled={isLoading}
-                id="reg-password"
-                onChange={(e) => updateField("password", e.target.value)}
-                placeholder="Create a password"
-                type="password"
-                value={formData.password}
-              />
-            </InputGroup>
-          </div>
-        </div>
-      </div>
-
-      {/* Step 2: Profile */}
-      <div
-        className={`transition-all duration-500 ease-out ${getSlideClass(
-          currentStep,
-          "profile",
-          direction
-        )}`}
-      >
-        <div className="grid gap-4 sm:gap-5">
-          <div className="grid gap-1.5 sm:gap-2">
-            <Label
-              className="font-medium text-foreground text-sm"
-              htmlFor="fullName"
-            >
-              Full Name
-            </Label>
-            <InputGroup className="h-11 rounded-xl border-border sm:h-12">
-              <InputGroupAddon>
-                <User className="size-4 text-muted-foreground" />
-              </InputGroupAddon>
-              <InputGroupInput
-                disabled={isLoading}
-                id="fullName"
-                onChange={(e) => updateField("fullName", e.target.value)}
-                placeholder="Your full name"
-                type="text"
-                value={formData.fullName}
-              />
-            </InputGroup>
-          </div>
-
-          <div className="grid gap-1.5 sm:gap-2">
-            <Label className="font-medium text-foreground text-sm">
-              I want to
-            </Label>
-            <div className="grid grid-cols-2 gap-2 sm:gap-3">
-              {[
-                {
-                  value: "provider",
-                  label: "Offer Skills",
-                  desc: "I provide services",
-                },
-                {
-                  value: "seeker",
-                  label: "Find Help",
-                  desc: "I need services",
-                },
-              ].map((option) => (
-                <button
-                  className={`rounded-xl border p-3 text-left transition-all duration-300 sm:p-4 ${
-                    formData.role === option.value
-                      ? "border-primary bg-primary/5 shadow-md shadow-primary/10"
-                      : "border-border hover:border-primary/30 hover:bg-secondary/50"
-                  }`}
+          <div className="space-y-4">
+            <div className="space-y-1.5">
+              <Label className="font-medium text-sm" htmlFor="reg-email">
+                Email
+              </Label>
+              <InputGroup className="h-10 rounded-lg border-border">
+                <InputGroupAddon>
+                  <Mail className="size-4 text-muted-foreground" />
+                </InputGroupAddon>
+                <InputGroupInput
                   disabled={isLoading}
-                  key={option.value}
-                  onClick={() => updateField("role", option.value)}
-                  type="button"
-                >
-                  <p className="font-medium text-sm">{option.label}</p>
-                  <p className="mt-0.5 text-muted-foreground text-xs">
-                    {option.desc}
-                  </p>
-                </button>
-              ))}
+                  id="reg-email"
+                  onChange={(e) => updateField("email", e.target.value)}
+                  placeholder="you@example.com"
+                  type="email"
+                  value={formData.email}
+                />
+              </InputGroup>
             </div>
-          </div>
-
-          <div className="grid gap-1.5 sm:gap-2">
-            <Label
-              className="font-medium text-foreground text-sm"
-              htmlFor="location"
-            >
-              Location (optional)
-            </Label>
-            <InputGroup className="h-11 rounded-xl border-border sm:h-12">
-              <InputGroupAddon>
-                <span className="text-muted-foreground text-sm">📍</span>
-              </InputGroupAddon>
-              <InputGroupInput
-                disabled={isLoading}
-                id="location"
-                onChange={(e) => updateField("location", e.target.value)}
-                placeholder="Your city or area"
-                type="text"
-                value={formData.location}
-              />
-            </InputGroup>
+            <div className="space-y-1.5">
+              <Label className="font-medium text-sm" htmlFor="reg-password">
+                Password
+              </Label>
+              <InputGroup className="h-10 rounded-lg border-border">
+                <InputGroupAddon>
+                  <Lock className="size-4 text-muted-foreground" />
+                </InputGroupAddon>
+                <InputGroupInput
+                  disabled={isLoading}
+                  id="reg-password"
+                  onChange={(e) => updateField("password", e.target.value)}
+                  placeholder="Create a password"
+                  type="password"
+                  value={formData.password}
+                />
+              </InputGroup>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Step 3: Review */}
-      <div
-        className={`transition-all duration-500 ease-out ${getSlideClass(
-          currentStep,
-          "review",
-          direction
-        )}`}
-      >
-        <div className="space-y-3 sm:space-y-4">
-          <div className="rounded-xl border border-border bg-secondary/30 p-3 sm:p-4">
-            <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider sm:text-xs">
-              Account
-            </span>
-            <p className="mt-1 font-medium text-sm">
-              {formData.email || "Not provided"}
-            </p>
-          </div>
-          <div className="rounded-xl border border-border bg-secondary/30 p-3 sm:p-4">
-            <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider sm:text-xs">
-              Name
-            </span>
-            <p className="mt-1 font-medium text-sm">
-              {formData.fullName || "Not provided"}
-            </p>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="rounded-xl border border-border bg-secondary/30 p-3 sm:p-4">
-              <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider sm:text-xs">
-                Role
-              </span>
-              <p className="mt-1 font-medium text-sm capitalize">
-                {getRoleLabel(formData.role)}
-              </p>
+        <div
+          className={`transition-all duration-300 ${getSlideClass(
+            currentStep,
+            "profile",
+            direction
+          )}`}
+        >
+          <div className="space-y-4">
+            <div className="space-y-1.5">
+              <Label className="font-medium text-sm" htmlFor="fullName">
+                Full Name
+              </Label>
+              <InputGroup className="h-10 rounded-lg border-border">
+                <InputGroupAddon>
+                  <User className="size-4 text-muted-foreground" />
+                </InputGroupAddon>
+                <InputGroupInput
+                  disabled={isLoading}
+                  id="fullName"
+                  onChange={(e) => updateField("fullName", e.target.value)}
+                  placeholder="Your full name"
+                  type="text"
+                  value={formData.fullName}
+                />
+              </InputGroup>
             </div>
-            <div className="rounded-xl border border-border bg-secondary/30 p-3 sm:p-4">
-              <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider sm:text-xs">
-                Location
+
+            <div className="space-y-1.5">
+              <Label className="font-medium text-sm">I want to</Label>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  {
+                    value: "provider",
+                    label: "Offer Skills",
+                    desc: "I provide services",
+                  },
+                  {
+                    value: "seeker",
+                    label: "Find Help",
+                    desc: "I need services",
+                  },
+                ].map((option) => (
+                  <button
+                    className={`rounded-lg border p-3 text-left transition-all ${
+                      formData.role === option.value
+                        ? "border-primary bg-primary/5 shadow-sm"
+                        : "border-border hover:border-primary/30 hover:bg-secondary/50"
+                    }`}
+                    disabled={isLoading}
+                    key={option.value}
+                    onClick={() => updateField("role", option.value)}
+                    type="button"
+                  >
+                    <p className="font-medium text-sm">{option.label}</p>
+                    <p className="mt-0.5 text-muted-foreground text-xs">
+                      {option.desc}
+                    </p>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <Label className="font-medium text-sm" htmlFor="location">
+                Location{" "}
+                <span className="text-muted-foreground">(optional)</span>
+              </Label>
+              <InputGroup className="h-10 rounded-lg border-border">
+                <InputGroupAddon>
+                  <span className="text-muted-foreground">📍</span>
+                </InputGroupAddon>
+                <InputGroupInput
+                  disabled={isLoading}
+                  id="location"
+                  onChange={(e) => updateField("location", e.target.value)}
+                  placeholder="Your city or area"
+                  type="text"
+                  value={formData.location}
+                />
+              </InputGroup>
+            </div>
+          </div>
+        </div>
+
+        <div
+          className={`transition-all duration-300 ${getSlideClass(
+            currentStep,
+            "review",
+            direction
+          )}`}
+        >
+          <div className="space-y-3">
+            <div className="rounded-lg border border-border/50 bg-secondary/20 p-3">
+              <span className="text-[10px] text-muted-foreground uppercase tracking-wide">
+                Account
               </span>
               <p className="mt-1 font-medium text-sm">
-                {formData.location || "Not set"}
+                {formData.email || "Not provided"}
               </p>
             </div>
+            <div className="rounded-lg border border-border/50 bg-secondary/20 p-3">
+              <span className="text-[10px] text-muted-foreground uppercase tracking-wide">
+                Name
+              </span>
+              <p className="mt-1 font-medium text-sm">
+                {formData.fullName || "Not provided"}
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="rounded-lg border border-border/50 bg-secondary/20 p-3">
+                <span className="text-[10px] text-muted-foreground uppercase tracking-wide">
+                  Role
+                </span>
+                <p className="mt-1 font-medium text-sm capitalize">
+                  {getRoleLabel(formData.role)}
+                </p>
+              </div>
+              <div className="rounded-lg border border-border/50 bg-secondary/20 p-3">
+                <span className="text-[10px] text-muted-foreground uppercase tracking-wide">
+                  Location
+                </span>
+                <p className="mt-1 font-medium text-sm">
+                  {formData.location || "Not set"}
+                </p>
+              </div>
+            </div>
+            <p className="px-1 text-center text-muted-foreground text-xs">
+              By creating an account, you agree to our terms and privacy policy.
+            </p>
           </div>
-          <p className="text-center text-muted-foreground text-xs">
-            By creating an account, you agree to our terms of service and
-            privacy policy.
-          </p>
         </div>
       </div>
 
-      {/* Navigation buttons for Signup */}
-      <div className="mt-8 flex gap-3">
+      <div className="flex gap-3">
         {currentIndex > 0 && (
           <Button
-            className="h-11 flex-1 rounded-full font-medium text-sm hover:bg-secondary sm:h-12 sm:text-base"
+            className="h-10 flex-1 rounded-lg font-medium"
             disabled={isLoading}
             onClick={goBack}
             variant="ghost"
@@ -881,7 +840,7 @@ function SignUpWizard({
         )}
         {currentIndex < steps.length - 1 ? (
           <Button
-            className="h-11 flex-1 rounded-full bg-primary font-medium text-primary-foreground text-sm transition-all duration-300 hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/20 sm:h-12 sm:text-base"
+            className="h-10 flex-1 rounded-lg bg-primary font-medium text-primary-foreground"
             disabled={isLoading}
             onClick={goNext}
           >
@@ -889,7 +848,7 @@ function SignUpWizard({
           </Button>
         ) : (
           <Button
-            className="h-11 flex-1 rounded-full bg-primary font-medium text-primary-foreground text-sm transition-all duration-300 hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/20 sm:h-12 sm:text-base"
+            className="h-10 flex-1 rounded-lg bg-primary font-medium text-primary-foreground"
             disabled={isLoading}
             onClick={handleAuth}
           >
@@ -977,7 +936,6 @@ export function AuthForm({ initialMode = "signup" }: AuthFormProps) {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  // Show email verification waiting screen
   if (verificationState === "waiting") {
     return (
       <VerificationWaitingScreen
@@ -994,84 +952,79 @@ export function AuthForm({ initialMode = "signup" }: AuthFormProps) {
     );
   }
 
-  // Show verified success screen
   if (verificationState === "verified") {
     return <VerificationSuccessScreen />;
   }
 
   return (
-    <div className="flex w-full flex-1 flex-col items-center justify-center p-4 sm:p-6 md:p-8">
-      <div className="w-full max-w-md space-y-4 sm:space-y-5">
-        {/* Header */}
-        <div className="flex flex-col items-center space-y-2 text-center sm:space-y-3">
-          <Image
-            alt="Bitwork"
-            className="h-7 w-7 sm:h-8 sm:w-8"
-            height={32}
-            priority
-            src="/bitwork.svg"
-            width={32}
-          />
-          <div className="w-full space-y-1 sm:space-y-2">
-            <h2 className="text-center font-serif text-foreground text-xl sm:text-2xl">
-              {authMode === "signup"
-                ? "Create your Bitwork account"
-                : "Welcome back to Bitwork"}
+    <div className="w-full">
+      <div className="mx-auto max-w-sm">
+        <div className="mb-6 text-center">
+          <div className="mb-4 flex justify-center">
+            <Image
+              alt="Bitwork"
+              className="h-8 w-8"
+              height={32}
+              priority
+              src="/bitwork.svg"
+              width={32}
+            />
+          </div>
+          <div className="space-y-1">
+            <h2 className="font-serif text-foreground text-xl">
+              {authMode === "signup" ? "Create your account" : "Welcome back"}
             </h2>
-            <p className="text-center text-muted-foreground text-sm">
+            <p className="text-muted-foreground text-sm">
               {authMode === "signup" ? (
                 <>
                   {currentStep === "credentials" &&
                     "Start by setting up your login credentials."}
-                  {currentStep === "profile" &&
-                    "Tell us a bit about yourself and your skills."}
+                  {currentStep === "profile" && "Tell us a bit about yourself."}
                   {currentStep === "review" &&
-                    "Review your information before creating your account."}
+                    "Review your information before creating."}
                 </>
               ) : (
-                "Sign in to your account to continue."
+                "Sign in to continue to Bitwork."
               )}
             </p>
           </div>
         </div>
 
         {authMode === "signup" && (
-          <StepIndicator
+          <div className="mb-6">
+            <StepIndicator
+              currentStep={currentStep}
+              onStepClick={goTo}
+              steps={STEPS}
+            />
+          </div>
+        )}
+
+        {authMode === "signin" ? (
+          <SignInForm
+            formData={formData}
+            handleAuth={handleAuth}
+            handleGoogleAuth={handleGoogleAuth}
+            isLoading={isLoading}
+            updateField={updateField}
+          />
+        ) : (
+          <SignUpWizard
+            currentIndex={currentIndex}
             currentStep={currentStep}
-            onStepClick={goTo}
+            direction={direction}
+            formData={formData}
+            goBack={goBack}
+            goNext={goNext}
+            handleAuth={handleAuth}
+            handleGoogleAuth={handleGoogleAuth}
+            isLoading={isLoading}
             steps={STEPS}
+            updateField={updateField}
           />
         )}
 
-        {/* Auth Content */}
-        <div className="relative">
-          {authMode === "signin" ? (
-            <SignInForm
-              formData={formData}
-              handleAuth={handleAuth}
-              handleGoogleAuth={handleGoogleAuth}
-              isLoading={isLoading}
-              updateField={updateField}
-            />
-          ) : (
-            <SignUpWizard
-              currentIndex={currentIndex}
-              currentStep={currentStep}
-              direction={direction}
-              formData={formData}
-              goBack={goBack}
-              goNext={goNext}
-              handleAuth={handleAuth}
-              handleGoogleAuth={handleGoogleAuth}
-              isLoading={isLoading}
-              steps={STEPS}
-              updateField={updateField}
-            />
-          )}
-        </div>
-
-        {/* Toggle between Signup/Signin */}
-        <div className="pt-4 text-center">
+        <div className="mt-5 text-center">
           <p className="text-muted-foreground text-sm">
             {authMode === "signup"
               ? "Already have an account?"
