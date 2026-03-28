@@ -487,14 +487,14 @@ function SignInForm({
   handleGoogleAuth: () => void;
 }) {
   return (
-    <div className="w-full max-w-sm space-y-5 p-6">
+    <div className="w-full max-w-sm space-y-3">
       <Button
-        className="h-11 w-full gap-3 rounded-lg border-border font-medium"
+        className="h-10 w-full gap-2 rounded-lg border-border font-medium text-sm"
         disabled={isLoading}
         onClick={handleGoogleAuth}
         variant="outline"
       >
-        <svg className="h-5 w-5" viewBox="0 0 24 24">
+        <svg className="h-4 w-4" viewBox="0 0 24 24">
           <title>Google</title>
           <path
             d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -521,13 +521,13 @@ function SignInForm({
           <div className="w-full border-border/50 border-t" />
         </div>
         <div className="relative flex justify-center">
-          <span className="bg-background px-3 text-muted-foreground text-xs">
+          <span className="bg-background px-3 text-[10px] text-muted-foreground">
             or
           </span>
         </div>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3">
         <div className="space-y-1.5">
           <Label className="font-medium text-sm" htmlFor="email">
             Email
@@ -606,14 +606,14 @@ function SignUpWizard({
   handleAuth: () => void;
 }) {
   return (
-    <div className="w-full max-w-sm space-y-6 p-6">
+    <div className="w-full max-w-sm space-y-3">
       <Button
-        className="h-11 w-full gap-3 rounded-lg border-border font-medium"
+        className="h-10 w-full gap-2 rounded-lg border-border font-medium text-sm"
         disabled={isLoading}
         onClick={handleGoogleAuth}
         variant="outline"
       >
-        <svg className="h-5 w-5" viewBox="0 0 24 24">
+        <svg className="h-4 w-4" viewBox="0 0 24 24">
           <title>Google</title>
           <path
             d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -640,7 +640,7 @@ function SignUpWizard({
           <div className="w-full border-border/50 border-t" />
         </div>
         <div className="relative flex justify-center">
-          <span className="bg-background px-3 text-muted-foreground text-xs">
+          <span className="bg-background px-3 text-[10px] text-muted-foreground">
             or
           </span>
         </div>
@@ -654,14 +654,17 @@ function SignUpWizard({
             direction
           )}`}
         >
-          <div className="space-y-4">
-            <div className="space-y-1.5">
-              <Label className="font-medium text-sm" htmlFor="reg-email">
+          <div className="space-y-3">
+            <div className="space-y-1">
+              <Label
+                className="font-medium text-xs sm:text-sm"
+                htmlFor="reg-email"
+              >
                 Email
               </Label>
-              <InputGroup className="h-10 rounded-lg border-border">
+              <InputGroup className="h-9 rounded-lg border-border sm:h-10">
                 <InputGroupAddon>
-                  <Mail className="size-4 text-muted-foreground" />
+                  <Mail className="size-3.5 text-muted-foreground sm:size-4" />
                 </InputGroupAddon>
                 <InputGroupInput
                   disabled={isLoading}
@@ -701,14 +704,17 @@ function SignUpWizard({
             direction
           )}`}
         >
-          <div className="space-y-4">
-            <div className="space-y-1.5">
-              <Label className="font-medium text-sm" htmlFor="fullName">
+          <div className="space-y-3">
+            <div className="space-y-1">
+              <Label
+                className="font-medium text-xs sm:text-sm"
+                htmlFor="fullName"
+              >
                 Full Name
               </Label>
-              <InputGroup className="h-10 rounded-lg border-border">
+              <InputGroup className="h-9 rounded-lg border-border sm:h-10">
                 <InputGroupAddon>
-                  <User className="size-4 text-muted-foreground" />
+                  <User className="size-3.5 text-muted-foreground sm:size-4" />
                 </InputGroupAddon>
                 <InputGroupInput
                   disabled={isLoading}
@@ -721,8 +727,10 @@ function SignUpWizard({
               </InputGroup>
             </div>
 
-            <div className="space-y-1.5">
-              <Label className="font-medium text-sm">I want to</Label>
+            <div className="space-y-1">
+              <Label className="font-medium text-xs sm:text-sm">
+                I want to
+              </Label>
               <div className="grid grid-cols-2 gap-2">
                 {[
                   {
@@ -737,7 +745,7 @@ function SignUpWizard({
                   },
                 ].map((option) => (
                   <button
-                    className={`rounded-lg border p-3 text-left transition-all ${
+                    className={`rounded-lg border p-2.5 text-left transition-all sm:p-3 ${
                       formData.role === option.value
                         ? "border-primary bg-primary/5 shadow-sm"
                         : "border-border hover:border-primary/30 hover:bg-secondary/50"
@@ -747,8 +755,10 @@ function SignUpWizard({
                     onClick={() => updateField("role", option.value)}
                     type="button"
                   >
-                    <p className="font-medium text-sm">{option.label}</p>
-                    <p className="mt-0.5 text-muted-foreground text-xs">
+                    <p className="font-medium text-xs sm:text-sm">
+                      {option.label}
+                    </p>
+                    <p className="mt-0.5 text-[10px] text-muted-foreground sm:text-xs">
                       {option.desc}
                     </p>
                   </button>
@@ -756,12 +766,15 @@ function SignUpWizard({
               </div>
             </div>
 
-            <div className="space-y-1.5">
-              <Label className="font-medium text-sm" htmlFor="location">
+            <div className="space-y-1">
+              <Label
+                className="font-medium text-xs sm:text-sm"
+                htmlFor="location"
+              >
                 Location{" "}
                 <span className="text-muted-foreground">(optional)</span>
               </Label>
-              <InputGroup className="h-10 rounded-lg border-border">
+              <InputGroup className="h-9 rounded-lg border-border sm:h-10">
                 <InputGroupAddon>
                   <span className="text-muted-foreground">📍</span>
                 </InputGroupAddon>
@@ -785,52 +798,52 @@ function SignUpWizard({
             direction
           )}`}
         >
-          <div className="space-y-3">
-            <div className="rounded-lg border border-border/50 bg-secondary/20 p-3">
+          <div className="space-y-2">
+            <div className="rounded-lg border border-border/50 bg-secondary/20 p-2.5">
               <span className="text-[10px] text-muted-foreground uppercase tracking-wide">
                 Account
               </span>
-              <p className="mt-1 font-medium text-sm">
+              <p className="font-medium text-xs sm:text-sm">
                 {formData.email || "Not provided"}
               </p>
             </div>
-            <div className="rounded-lg border border-border/50 bg-secondary/20 p-3">
+            <div className="rounded-lg border border-border/50 bg-secondary/20 p-2.5">
               <span className="text-[10px] text-muted-foreground uppercase tracking-wide">
                 Name
               </span>
-              <p className="mt-1 font-medium text-sm">
+              <p className="font-medium text-xs sm:text-sm">
                 {formData.fullName || "Not provided"}
               </p>
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="rounded-lg border border-border/50 bg-secondary/20 p-3">
+            <div className="grid grid-cols-2 gap-2">
+              <div className="rounded-lg border border-border/50 bg-secondary/20 p-2.5">
                 <span className="text-[10px] text-muted-foreground uppercase tracking-wide">
                   Role
                 </span>
-                <p className="mt-1 font-medium text-sm capitalize">
+                <p className="font-medium text-xs capitalize sm:text-sm">
                   {getRoleLabel(formData.role)}
                 </p>
               </div>
-              <div className="rounded-lg border border-border/50 bg-secondary/20 p-3">
+              <div className="rounded-lg border border-border/50 bg-secondary/20 p-2.5">
                 <span className="text-[10px] text-muted-foreground uppercase tracking-wide">
                   Location
                 </span>
-                <p className="mt-1 font-medium text-sm">
+                <p className="font-medium text-xs sm:text-sm">
                   {formData.location || "Not set"}
                 </p>
               </div>
             </div>
-            <p className="px-1 text-center text-muted-foreground text-xs">
+            <p className="px-1 text-center text-[10px] text-muted-foreground sm:text-xs">
               By creating an account, you agree to our terms and privacy policy.
             </p>
           </div>
         </div>
       </div>
 
-      <div className="flex gap-3">
+      <div className="flex gap-2">
         {currentIndex > 0 && (
           <Button
-            className="h-10 flex-1 rounded-lg font-medium"
+            className="h-9 flex-1 rounded-lg text-xs sm:text-sm"
             disabled={isLoading}
             onClick={goBack}
             variant="ghost"
@@ -840,7 +853,7 @@ function SignUpWizard({
         )}
         {currentIndex < steps.length - 1 ? (
           <Button
-            className="h-10 flex-1 rounded-lg bg-primary font-medium text-primary-foreground"
+            className="h-9 flex-1 rounded-lg bg-primary font-medium text-primary-foreground text-xs sm:text-sm"
             disabled={isLoading}
             onClick={goNext}
           >
@@ -848,12 +861,12 @@ function SignUpWizard({
           </Button>
         ) : (
           <Button
-            className="h-10 flex-1 rounded-lg bg-primary font-medium text-primary-foreground"
+            className="h-9 flex-1 rounded-lg bg-primary font-medium text-primary-foreground text-xs sm:text-sm"
             disabled={isLoading}
             onClick={handleAuth}
           >
             {isLoading ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin sm:mr-2 sm:h-4 sm:w-4" />
             ) : (
               "Create Account"
             )}
@@ -958,40 +971,39 @@ export function AuthForm({ initialMode = "signup" }: AuthFormProps) {
 
   return (
     <div className="w-full">
-      <div className="mx-auto max-w-sm">
-        <div className="mb-6 text-center">
-          <div className="mb-4 flex justify-center">
+      <div className="mx-auto max-w-sm p-5 sm:p-6">
+        <div className="mb-4 text-center">
+          <div className="mb-3 flex justify-center">
             <Image
               alt="Bitwork"
-              className="h-8 w-8"
-              height={32}
+              className="h-7 w-7"
+              height={28}
               priority
               src="/bitwork.svg"
-              width={32}
+              width={28}
             />
           </div>
-          <div className="space-y-1">
-            <h2 className="font-serif text-foreground text-xl">
+          <div className="space-y-0.5">
+            <h2 className="font-serif text-foreground text-lg sm:text-xl">
               {authMode === "signup" ? "Create your account" : "Welcome back"}
             </h2>
-            <p className="text-muted-foreground text-sm">
+            <p className="text-muted-foreground text-xs sm:text-sm">
               {authMode === "signup" ? (
                 <>
                   {currentStep === "credentials" &&
-                    "Start by setting up your login credentials."}
-                  {currentStep === "profile" && "Tell us a bit about yourself."}
-                  {currentStep === "review" &&
-                    "Review your information before creating."}
+                    "Set up your login credentials."}
+                  {currentStep === "profile" && "Tell us about yourself."}
+                  {currentStep === "review" && "Review before creating."}
                 </>
               ) : (
-                "Sign in to continue to Bitwork."
+                "Sign in to continue."
               )}
             </p>
           </div>
         </div>
 
         {authMode === "signup" && (
-          <div className="mb-6">
+          <div className="mb-4">
             <StepIndicator
               currentStep={currentStep}
               onStepClick={goTo}
@@ -1024,8 +1036,8 @@ export function AuthForm({ initialMode = "signup" }: AuthFormProps) {
           />
         )}
 
-        <div className="mt-5 text-center">
-          <p className="text-muted-foreground text-sm">
+        <div className="mt-4 text-center">
+          <p className="text-muted-foreground text-xs sm:text-sm">
             {authMode === "signup"
               ? "Already have an account?"
               : "Don't have an account?"}{" "}

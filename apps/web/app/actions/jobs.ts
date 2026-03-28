@@ -103,14 +103,14 @@ export async function getProviderStats(userId: string) {
   };
 }
 
-export function getProviderJobs(userId: string, status?: Job["status"]) {
+export async function getProviderJobs(userId: string, status?: Job["status"]) {
   const whereConditions = [eq(jobs.providerId, userId)];
 
   if (status) {
     whereConditions.push(eq(jobs.status, status));
   }
 
-  return db
+  return await db
     .select()
     .from(jobs)
     .where(and(...whereConditions))
