@@ -340,3 +340,47 @@ import type { Job, Profile, Application } from '@bitwork/db';
 - [Technical Documentation](docs/TECHNICAL.md) - Detailed tech stack info
 - [Architecture Overview](docs/architecture/OVERVIEW.md) - System design
 - [Database Schema](docs/architecture/DATABASE.md) - Table definitions
+
+---
+
+# Self-Evolution & Continuous Improvement
+
+This AGENTS.md file defines the agent's behavior and should evolve alongside the project.
+
+## Feedback Loop
+
+**Agents should proactively update this file when:**
+
+1. **New patterns emerge** - Document successful approaches discovered during development
+2. **Conventions change** - Add or modify naming, structure, or architectural patterns
+3. **Tools are adopted** - Include new libraries, frameworks, or development practices
+4. **Common issues arise** - Add warnings or best practices to prevent repeated mistakes
+5. **Project evolves** - Update project state, tech stack, or structural information
+
+## How to Improve AGENTS.md
+
+When working on features, if you discover:
+- A better way to organize code or components
+- Useful utilities or patterns not documented
+- Common pitfalls that should be avoided
+- Missing context that would help future agents
+
+**Propose an update** to AGENTS.md as part of your work. Include:
+- Clear explanation of what to add/change
+- The reasoning behind the change
+- Examples where applicable
+
+## Example Updates
+
+```markdown
+## Common Patterns
+Add new section documenting discovered patterns...
+
+## Gotchas
+Add warning about a common mistake...
+
+## Tool Usage
+Update commands or add new tooling documentation...
+```
+
+This creates a self-improving system where each agent makes the project easier for the next agent to work on.
