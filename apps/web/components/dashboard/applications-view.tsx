@@ -134,7 +134,6 @@ function ApplicationsList({
                   <div className="flex gap-2">
                     <form
                       action={async () => {
-                        "use server";
                         await updateApplicationStatus(
                           app.id,
                           userId,
@@ -152,7 +151,6 @@ function ApplicationsList({
                     </form>
                     <form
                       action={async () => {
-                        "use server";
                         await updateApplicationStatus(
                           app.id,
                           userId,

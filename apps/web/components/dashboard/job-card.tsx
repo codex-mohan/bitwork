@@ -14,6 +14,7 @@ import Link from "next/link";
 import { useState } from "react";
 import type { JobWithProvider } from "@/app/actions/jobs";
 import { toggleSaveJob } from "@/app/actions/jobs";
+import { JobReader } from "@/components/ai/job-reader";
 
 interface JobCardProps {
   job: JobWithProvider;
@@ -83,12 +84,23 @@ export function JobCard({ job, userId, showApplyButton = true }: JobCardProps) {
               </AvatarFallback>
             </Avatar>
             <div className="min-w-0 flex-1">
-              <Link
-                className="line-clamp-2 font-semibold text-lg leading-tight transition-colors hover:text-primary"
-                href={`/home/jobs/${job.id}`}
-              >
-                {job.title}
-              </Link>
+              <div className="flex items-start gap-2">
+                <Link
+                  className="line-clamp-2 flex-1 font-semibold text-lg leading-tight transition-colors hover:text-primary"
+                  href={`/home/jobs/${job.id}`}
+                >
+                  {job.title}
+                </Link>
+                <JobReader
+                  budget={budget}
+                  className="shrink-0"
+                  compact
+                  description={job.description}
+                  location={location}
+                  skills={job.skills ?? undefined}
+                  title={job.title}
+                />
+              </div>
               <p className="mt-0.5 text-muted-foreground text-sm">
                 {job.provider?.fullName ?? "Anonymous"}
               </p>
