@@ -295,18 +295,26 @@ import type { Job, Profile, Application } from '@bitwork/db';
    ```bash
    bun run check       # Lint & format code
    bun run check-types # TypeScript type checking
+   bun run build       # Verify build succeeds
    ```
 
 2. **Commit message format**:
-   - Use clear, descriptive commit messages
-   - Start with a verb: `Add`, `Fix`, `Update`, `Remove`, `Implement`
-   - Keep the first line under 72 characters
-   - Add body text for complex changes
+   ```
+   feat|fix|chore(web|web/db|web/ai|web/ui|packages/db|packages/ui|packages/ai|others)/<short-description>
+   ```
+
+   Examples:
+   - `feat/web/add-job-posting-form` - Add job posting form
+   - `fix/web/auth-redirect-loop` - Fix authentication redirect loop
+   - `feat/web/ai/add-chat-api` - Add AI chat API routes
+   - `chore/packages/db/add-chat-tables` - Add chat tables schema
+   - `feat/packages/ai/add-groq-provider` - Add Groq AI provider
 
 3. **Commit timing**:
    - Commit functional features as soon as they are complete and tested
    - Do not accumulate multiple unrelated changes in one commit
    - Use atomic commits (one logical change per commit)
+   - Commit and push immediately after completing a feature
 
 ## Pushing to Remote
 
