@@ -300,15 +300,21 @@ import type { Job, Profile, Application } from '@bitwork/db';
 
 2. **Commit message format**:
    ```
-   feat|fix|chore(web|web/db|web/ai|web/ui|packages/db|packages/ui|packages/ai|others)/<short-description>
+   <type>(<scope>): <short description>
+
+   [Optional body text for complex changes]
    ```
 
+   Types: `feat`, `fix`, `chore`, `docs`, `refactor`, `test`
+
+   Scope: `web`, `packages/db`, `packages/ui`, `packages/ai`, or `packages/others`
+
    Examples:
-   - `feat/web/add-job-posting-form` - Add job posting form
-   - `fix/web/auth-redirect-loop` - Fix authentication redirect loop
-   - `feat/web/ai/add-chat-api` - Add AI chat API routes
-   - `chore/packages/db/add-chat-tables` - Add chat tables schema
-   - `feat/packages/ai/add-groq-provider` - Add Groq AI provider
+   - `feat(web): add job posting form`
+   - `fix(web): resolve authentication redirect loop`
+   - `feat(packages/ai): add AI chat with Groq integration`
+   - `chore(packages/db): add chat tables for persistence`
+   - `feat(web): integrate AI assistant into dashboard`
 
 3. **Commit timing**:
    - Commit functional features as soon as they are complete and tested
