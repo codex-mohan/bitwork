@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["@bitwork/ui"],
+  transpilePackages: ["@bitwork/ui", "@bitwork/db", "@bitwork/ai"],
   images: {
     remotePatterns: [
       {

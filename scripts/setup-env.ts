@@ -1,13 +1,12 @@
 import { write } from "bun";
 
-const TASKS = [
-  { path: "packages/db/.env", name: "Database Package" },
-  { path: "apps/web/.env", name: "Web App" },
-];
+const TASKS = [{ path: "packages/db/.env", name: "Database Package" }];
 
 console.log("\nEnvironment Setup\n");
-console.log("This script will set up the DATABASE_URL for your applications.");
-console.log("It will create .env files in packages/db and apps/web.\n");
+console.log(
+  "This script will set up the environment variables for your applications."
+);
+console.log("It will create .env files in packages/db.\n");
 
 // biome-ignore lint/suspicious/noAlert: CLI script
 const dbUrl = prompt("Enter your DATABASE_URL:");
@@ -17,17 +16,32 @@ if (!dbUrl?.trim()) {
   process.exit(1);
 }
 
-const content = `DATABASE_URL="${dbUrl.trim()}"\n`;
+// biome-ignore lint/suspicious/noAlert: CLI script
+const groqKey = prompt("Enter your GROQ_API_KEY (press Enter to skip):");
+const openaiKey = prompt(
+  "Enter your OPENAI_API_KEY for TTS (press Enter to skip):"
+);
+
+const dbContent = `DATABASE_URL="${dbUrl.trim()}"\n`;
+const webContent = `DATABASE_URL="${dbUrl.trim()}"
+${groqKey?.trim() ? `GROQ_API_KEY="${groqKey.trim()}"` : "# GROQ_API_KEY is optional but recommended for AI features"}
+${openaiKey?.trim() ? `OPENAI_API_KEY="${openaiKey.trim()}"` : "# OPENAI_API_KEY is optional but required for TTS features"}
+`;
+
 console.log("\n");
 
-for (const task of TASKS) {
-  try {
-    // Bun.write (imported as 'write') resolves relative paths from the project root automatically!
-    // No need for 'path.join' or 'process.cwd()'
-    await write(task.path, content);
-    console.log(`Wrote to ${task.name} (${task.path})`);
-  } catch (error) {
-    console.error(`Failed to write to ${task.name}:`, error);
-  }
+try {
+  await write("packages/db/.env", dbContent);
+  console.log("Wrote to Database Package (.env)");
+} catch (error) {
+  console.error("Failed to write to Database Package:", error);
 }
+
+try {
+  await write("apps/web/.env.local", webContent);
+  console.log("Wrote to Web App (.env.local)");
+} catch (error) {
+  console.error("Failed to write to Web App:", error);
+}
+
 console.log("\n✨ Setup complete! You can now run 'bun dev'.\n");

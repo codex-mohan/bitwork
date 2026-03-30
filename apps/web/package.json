@@ -10,13 +10,18 @@
     "check-types": "next typegen && tsc --noEmit"
   },
   "dependencies": {
+    "@ai-sdk/groq": "^3.0.31",
+    "@ai-sdk/openai": "^1.0.0",
+    "@bitwork/ai": "workspace:*",
     "@bitwork/ui": "workspace:*",
     "@fontsource/instrument-sans": "^5.2.8",
     "@fontsource/inter": "^5.2.8",
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.95.3",
     "@tailwindcss/postcss": "^4.1.18",
+    "ai": "^6.0.141",
     "drizzle-orm": "^0.45.1",
+    "groq-sdk": "^1.1.2",
     "lenis": "^1.3.17",
     "lucide-react": "^0.563.0",
     "motion": "^12.34.0",
