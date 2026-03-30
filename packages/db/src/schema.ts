@@ -228,6 +228,47 @@ export const posts = pgTable("bitwork_posts", {
   updatedAt: timestamp("updatedAt").defaultNow(),
 });
 
+export const chatSessions = pgTable(
+  "chat_sessions",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => profiles.id),
+    title: text("title"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => ({
+    userIdIdx: index("chat_sessions_user_id_idx").on(table.userId),
+    createdAtIdx: index("chat_sessions_created_at_idx").on(table.createdAt),
+  })
+);
+
+export const chatMessages = pgTable(
+  "chat_messages",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    sessionId: uuid("session_id")
+      .notNull()
+      .references(() => chatSessions.id, { onDelete: "cascade" }),
+    role: text("role").notNull(), // 'user' | 'assistant'
+    content: text("content").notNull(),
+    metadata: jsonb("metadata"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => ({
+    sessionIdIdx: index("chat_messages_session_id_idx").on(table.sessionId),
+    createdAtIdx: index("chat_messages_created_at_idx").on(table.createdAt),
+  })
+);
+
 export type Profile = typeof profiles.$inferSelect;
 export type NewProfile = typeof profiles.$inferInsert;
 export type Job = typeof jobs.$inferSelect;
@@ -242,3 +283,7 @@ export type Message = typeof messages.$inferSelect;
 export type NewMessage = typeof messages.$inferInsert;
 export type UserPreference = typeof userPreferences.$inferSelect;
 export type NewUserPreference = typeof userPreferences.$inferInsert;
+export type ChatSession = typeof chatSessions.$inferSelect;
+export type NewChatSession = typeof chatSessions.$inferInsert;
+export type ChatMessage = typeof chatMessages.$inferSelect;
+export type NewChatMessage = typeof chatMessages.$inferInsert;
