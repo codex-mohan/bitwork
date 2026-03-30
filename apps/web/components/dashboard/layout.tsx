@@ -28,11 +28,13 @@ import {
   MessageSquare,
   Search,
   Settings,
+  Sparkles,
   User,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
+import { ChatAssistant } from "@/components/ai/chat-assistant";
 import { NotificationBell } from "./notification-bell";
 
 interface DashboardLayoutProps {
@@ -51,6 +53,7 @@ const seekerNavItems = [
   { href: "/home/jobs", label: "Browse Jobs", icon: Search },
   { href: "/home/applications", label: "My Applications", icon: Briefcase },
   { href: "/home/saved", label: "Saved Jobs", icon: Briefcase },
+  { href: "/home/assistant", label: "AI Assistant", icon: Sparkles },
 ];
 
 const providerNavItems = [
@@ -58,6 +61,7 @@ const providerNavItems = [
   { href: "/home/jobs", label: "My Jobs", icon: Briefcase },
   { href: "/home/applications", label: "Applications", icon: User },
   { href: "/home/analytics", label: "Analytics", icon: Briefcase },
+  { href: "/home/assistant", label: "AI Assistant", icon: Sparkles },
 ];
 
 export function DashboardLayout({ children, user }: DashboardLayoutProps) {
@@ -248,6 +252,8 @@ export function DashboardLayout({ children, user }: DashboardLayoutProps) {
 
         <main className="flex-1 p-4 lg:p-8">{children}</main>
       </div>
+
+      <ChatAssistant language="en" />
     </div>
   );
 }
